@@ -1,0 +1,80 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+无人机企业网站首页设计与开发指南
+开发者角色定位
+您是一位资深的HTML开发工程师,拥有顶级视觉UI审美和精致的交互动效能力。您能够将设计理念完美转化为代码实现,注重每一个像素的精确度和每一个交互的流畅性。
+技术方案
+由于效率原因,必须使用tailwind组件库和图标进行设计
+由于官网为静态页面的特性,使用原生html来实现设计,不使用任何前端框架
+设计语言规范(必须完整参考https://www.trimble.com/en)
+1. 排版层级系统
+对比原则：通过字号和字重的强烈对比建立清晰的视觉层级
+空间美学：采用大量负空间(留白)营造呼吸感，提升内容可读性
+极简主义：遵循"少即是多"的设计理念，去除冗余视觉元素
+2. 字体规范
+主字体:Open Sans - 具有良好可读性和现代感的无衬线字体
+字体应用：通过字重变化(Light/Regular/Bold)实现信息层级区分
+3. 视觉元素
+圆角处理：采用小圆角(2-4px)，保持专业感的同时增加亲和力
+几何形态：简洁的几何图形语言，避免过度装饰
+4. 栅格与间距
+间距系统：采用大间距设计，模块间留有充足呼吸空间
+布局节奏：宽松的内容排布，降低认知负荷
+5. 色彩策略
+品牌主色：#0ABAB5 (青绿色) - 仅用于关键交互元素和强调信息
+中性色板：以黑白灰为主的中性色系构建主要界面
+色彩克制：有节制的色彩运用，确保专业性和功能性
+6. 交互体验
+微交互设计：精致的过渡动画和状态反馈
+细节打磨：注重每个交互细节的流畅性和一致性
+动效原则：功能性优先，动画服务于用户体验
+首页信息架构(参考FlytBase)
+1. 顶部导航区
+主导航菜单:Platform、Use Cases、Partners、Pricing、Resources、Get Started
+语言切换:EN/ES
+用户入口:Log in / Contact us
+2. 英雄区(Hero Section)
+主标题:Enterprise AI Platform for Drone Autonomy Built for Data Security
+副标题:强调AI驱动、BVLOS合规、IT安全
+行动按钮:Contact Us / Watch Video
+信任背书:展示全球系统集成商和企业客户logo
+3. 客户证言轮播
+多位客户的视频/文字证言
+强调实时视频流、数据捕获、安全飞行等核心价值
+4. 问题提出模块
+标题："While selecting a drone-in-a-box solution, do you often wonder"
+列出4个关键痛点问题
+5. 核心产品介绍 - Meet FlytBase
+产品定位描述
+CTA按钮:Get Started - It's Free
+6. Flinks集成模块
+展示第三方应用集成能力
+集成类别:Data Processing、UTM、Live Streaming、DAAM、Mission & Logs、FTS
+7. Shield安全模块
+安全特性介绍
+部署选项:Cloud、In-country Cloud、On-premises、Air-Gapped
+合规认证展示
+8. BVLOS合规模块
+Ground Risk Mitigation(地面风险缓解)
+Air Risk Mitigation(空中风险缓解)
+One-to Many Ops(一对多操作)
+BVLOS Assistance Program(BVLOS协助计划)
+9. 硬件兼容性模块
+展示20+硬件选项
+分类展示:Drones、Docks、Payloads
+10. 行业应用模块
+标题："Single Platform. Multiple Industries."
+行业选项卡:Oil & Gas、Mining、Agriculture、Public Safety、Solar、Construction
+11. 合作伙伴网络
+统计数据展示
+地图定位功能
+12. 底部CTA区域
+标题："Ready to deploy automated drones?"
+行动按钮:Get Started - It's Free
+13. 页脚
+Newsletter订阅
+网站地图:PLATFORM、SOLUTIONS、RESOURCES、COMPANY
+版权信息和法律链接

@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DroneFlow - Enterprise AI Platform for Drone Autonomy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Open Sans', 'system-ui', 'sans-serif'],
+                    },
+                    fontWeight: {
+                        'extralight': '200',
+                        'light': '300',
+                        'normal': '400',
+                        'medium': '500',
+                        'semibold': '600',
+                        'bold': '700',
+                        'extrabold': '800',
+                    },
+                    colors: {
+                        'brand': '#028985',
+                        'brand-light': '#0ABAB5',
+                        'neutral-50': '#fafafa',
+                        'neutral-100': '#f5f5f5',
+                        'neutral-200': '#e5e5e5',
+                        'neutral-300': '#d4d4d4',
+                        'neutral-400': '#a3a3a3',
+                        'neutral-500': '#737373',
+                        'neutral-600': '#525252',
+                        'neutral-700': '#404040',
+                        'neutral-800': '#262626',
+                        'neutral-900': '#171717',
+                    },
+                    spacing: {
+                        '18': '4.5rem',
+                        '22': '5.5rem',
+                        '26': '6.5rem',
+                        '30': '7.5rem',
+                        '34': '8.5rem',
+                        '38': '9.5rem',
+                    },
+                    borderRadius: {
+                        'trimble': '4px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .hero-background {
+            background-image: url('./hero-background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+        .hero-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        .navbar-hidden {
+            transform: translateY(-100%);
+        }
+        /* 导航栏动画 */
+        .navbar-visible {
+            transform: translateY(0);
+        }
+        .navbar-transition {
+            transition: transform 0.3s ease-in-out;
+        }
+        .text-shadow {
+            text-shadow: 0 4px 8px rgba(0,0,0,0.7);
+        }
+        .hero-text-shadow {
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8), 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        /* 基础动画类 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.6s ease-out;
+        }
+
+        .slide-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.6s ease-out;
+        }
+
+        .slide-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* 交错动画延迟 */
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+
+        /* 卡片悬停效果 */
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        /* 简洁的卡片悬停效果 */
+        .hover-subtle {
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .hover-subtle:hover {
+            border-color: #171717;
+        }
+
+        /* 按钮动画 */
+        .btn-animate {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-animate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn-animate:hover::before {
+            left: 100%;
+        }
+
+        .btn-animate:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        /* 图标动画 */
+        .icon-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .icon-hover:hover {
+            transform: rotate(10deg) scale(1.15);
+            color: #0ABAB5;
+        }
+
+        /* 微动画 */
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .pulse-gentle {
+            animation: pulseGentle 4s ease-in-out infinite;
+        }
+
+        @keyframes pulseGentle {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+
+        /* 文字动画 */
+        .text-reveal {
+            overflow: hidden;
+        }
+
+        .text-reveal span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: textReveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes textReveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 边框动画 */
+        .border-animate {
+            position: relative;
+        }
+
+        .border-animate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid transparent;
+            border-radius: inherit;
+            background: linear-gradient(45deg, #028985, #0ABAB5) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: subtract;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .border-animate:hover::before {
+            opacity: 1;
+        }
+
+        /* 渐变背景动画 */
+        .gradient-bg {
+            background: linear-gradient(45deg, #028985, #0ABAB5, #028985);
+            background-size: 300% 300%;
+            animation: gradientShift 4s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* 数字计数动画 */
+        .counter {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* 加载动画 */
+        .loading-dots::after {
+            content: '';
+            animation: dots 2s linear infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+
+        /* 英雄区专用动画 */
+        .hero-content {
+            animation: heroFadeIn 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes heroFadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 弹跳效果 */
+        .bounce-in {
+            animation: bounceIn 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* 完美圆点 */
+        .perfect-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #028985;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-right: 12px;
+            margin-top: 0.6em;
+        }
+    </style>
+</head>
+<body class="font-sans text-neutral-800 antialiased">
+    <!-- Navigation -->
+    <header id="navbar" class="bg-white sticky top-0 z-50 navbar-transition navbar-visible">
+        <!-- Top Bar -->
+        <div class="bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-12">
+                    <!-- Left Side - Company Info -->
+                    <div class="flex items-center space-x-6 text-sm">
+                        <!-- Empty space to maintain layout balance -->
+                    </div>
+                    
+                    <!-- Right Side - Utilities -->
+                    <div class="flex items-center space-x-6">
+                        <!-- Language Selector -->
+                        <div class="flex items-center space-x-2 text-sm">
+                            <span class="text-neutral-600">EN</span>
+                            <span class="text-neutral-300">|</span>
+                            <span class="text-neutral-400">ES</span>
+                        </div>
+                        
+                        <!-- Search -->
+                        <button class="text-neutral-500 hover:text-neutral-900 transition-colors">
+                            <i class="fas fa-search text-sm"></i>
+                        </button>
+                        
+
+                        
+                        <!-- User Account -->
+                        <a href="#login" class="text-neutral-600 hover:text-neutral-900 transition-colors text-sm font-normal">Log in</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Navigation -->
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <div class="flex items-center">
+                        <img src="logo.png" alt="Company Logo" class="h-8">
+                    </div>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center space-x-12">
+                    <div class="relative group">
+                        <a href="#industries" class="text-neutral-700 hover:text-brand transition-colors font-normal uppercase text-sm tracking-wide flex items-center">
+                            INDUSTRIES
+                            <i class="fas fa-chevron-down ml-2 text-xs opacity-60"></i>
+                        </a>
+                    </div>
+                    <div class="relative group">
+                        <a href="#products" class="text-neutral-700 hover:text-brand transition-colors font-normal uppercase text-sm tracking-wide flex items-center">
+                            PRODUCTS
+                            <i class="fas fa-chevron-down ml-2 text-xs opacity-60"></i>
+                        </a>
+                    </div>
+                    <div class="relative group">
+                        <a href="#resources" class="text-neutral-700 hover:text-brand transition-colors font-normal uppercase text-sm tracking-wide flex items-center">
+                            RESOURCES
+                            <i class="fas fa-chevron-down ml-2 text-xs opacity-60"></i>
+                        </a>
+                    </div>
+                    <div class="relative group">
+                        <a href="#events" class="text-neutral-700 hover:text-brand transition-colors font-normal uppercase text-sm tracking-wide">
+                            EVENTS
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Right Side Actions -->
+                <div class="hidden lg:flex items-center space-x-4">
+                    <button class="border border-neutral-900 hover:bg-neutral-900 text-neutral-900 hover:text-white px-6 py-3 rounded-trimble font-medium transition-colors text-sm uppercase tracking-wide">
+                        CONTACT SALES
+                    </button>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="lg:hidden">
+                    <button type="button" class="text-neutral-700 hover:text-brand focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-background py-32 lg:py-40 min-h-screen flex items-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div class="hero-content">
+                <div class="fade-in stagger-1">
+                    <h1 class="text-5xl lg:text-7xl font-light text-white leading-tight mb-8 max-w-3xl">
+                        Enterprise AI Platform for 
+                        <span class="text-white font-normal">Drone Autonomy</span> 
+                        Built for Data Security
+                    </h1>
+                </div>
+                
+                <div class="fade-in stagger-2">
+                    <p class="text-lg lg:text-xl text-neutral-200 mb-12 leading-relaxed max-w-2xl font-light">
+                        AI-driven autonomous drone operations with BVLOS compliance, enterprise-grade IT security, 
+                        and seamless integration capabilities for mission-critical applications.
+                    </p>
+                </div>
+                
+                <div class="fade-in stagger-3 flex flex-col sm:flex-row gap-6">
+                    <button class="bg-white hover:bg-brand text-neutral-900 hover:text-white px-10 py-5 rounded-trimble font-medium text-xl transition-all duration-300">
+                        Contact Us
+                    </button>
+                    <button class="border border-white hover:border-brand hover:bg-brand text-white px-10 py-5 rounded-trimble font-medium text-xl transition-all duration-300 flex items-center justify-center">
+                        <i class="fas fa-play mr-3"></i>
+                        Watch Video
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Testimonials Carousel -->
+    <section class="bg-white py-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 slide-in-left">
+                <div class="flex items-center justify-center mb-8">
+                    <div class="w-1 h-8 bg-brand mr-4"></div>
+                    <h2 class="text-3xl lg:text-4xl font-light text-neutral-900">
+                        Powering <span class="font-semibold">Mission-Critical</span> Operations Worldwide
+                    </h2>
+                </div>
+                <p class="text-lg text-neutral-600 max-w-3xl mx-auto font-light">
+                    See how industry leaders are transforming their operations with our autonomous drone platform
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-12">
+                <div class="border border-neutral-200 p-8 rounded-trimble hover-subtle bg-white slide-in-left stagger-1">
+                    <div class="flex items-center mb-6">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" 
+                             alt="John Martinez" class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-neutral-100"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mr-4 border-2 border-neutral-100" style="display:none;">
+                            <span class="text-white font-medium text-lg">JM</span>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-neutral-900">John Martinez</h4>
+                            <p class="text-neutral-600 text-sm">Operations Director, Energy Corp</p>
+                        </div>
+                    </div>
+                    <p class="text-neutral-700 leading-relaxed">
+                        "Real-time video streaming and automated data capture have revolutionized our inspection processes. 
+                        Safety compliance increased by 40% while reducing operational costs."
+                    </p>
+                </div>
+                
+                <div class="border border-neutral-200 p-8 rounded-trimble hover-subtle bg-white slide-in-left stagger-2">
+                    <div class="flex items-center mb-6">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face" 
+                             alt="Sarah Chen" class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-neutral-100"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mr-4 border-2 border-neutral-100" style="display:none;">
+                            <span class="text-white font-medium text-lg">SC</span>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-neutral-900">Sarah Chen</h4>
+                            <p class="text-neutral-600 text-sm">CTO, Infrastructure Solutions</p>
+                        </div>
+                    </div>
+                    <p class="text-neutral-700 leading-relaxed">
+                        "The BVLOS compliance features and enterprise security made deployment seamless. 
+                        Our surveillance operations now run 24/7 with complete confidence."
+                    </p>
+                </div>
+                
+                <div class="border border-neutral-200 p-8 rounded-trimble hover-subtle bg-white slide-in-left stagger-3">
+                    <div class="flex items-center mb-6">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" 
+                             alt="David Thompson" class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-neutral-100"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mr-4 border-2 border-neutral-100" style="display:none;">
+                            <span class="text-white font-medium text-lg">DT</span>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-neutral-900">David Thompson</h4>
+                            <p class="text-neutral-600 text-sm">Fleet Manager, Mining Operations</p>
+                        </div>
+                    </div>
+                    <p class="text-neutral-700 leading-relaxed">
+                        "Integration with our existing systems was flawless. The AI-driven analytics 
+                        provide insights that have optimized our entire operation workflow."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problems Section -->
+    <section class="bg-neutral-100 py-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-24 fade-in">
+                <p class="text-sm font-medium text-brand uppercase tracking-widest mb-6">
+                    PLATFORM CAPABILITIES
+                </p>
+                <div class="flex items-center justify-center mb-4">
+                    <div class="w-1 h-8 bg-brand mr-4"></div>
+                    <h2 class="text-3xl lg:text-4xl font-light text-neutral-900">
+                        While selecting a <span class="font-semibold">drone-in-a-box</span> solution, do you often wonder
+                    </h2>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <div class="text-center p-6 slide-in-left stagger-1">
+                    <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-8 bounce-in border border-neutral-200">
+                        <i class="fas fa-shield-alt text-neutral-900 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-neutral-900 mb-4 leading-tight">
+                        Can it ensure data security and regulatory compliance?
+                    </h3>
+                    <p class="text-sm text-neutral-600 leading-relaxed">
+                        Enterprise-grade security with ISO 27001, SOC 2, and GDPR compliance built-in from day one.
+                    </p>
+                </div>
+                
+                <div class="text-center p-6 slide-in-left stagger-2">
+                    <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-8 bounce-in border border-neutral-200">
+                        <i class="fas fa-network-wired text-neutral-900 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-neutral-900 mb-4 leading-tight">
+                        Will it integrate seamlessly with existing IT infrastructure?
+                    </h3>
+                    <p class="text-sm text-neutral-600 leading-relaxed">
+                        API-first architecture with 200+ pre-built integrations and flexible deployment options.
+                    </p>
+                </div>
+                
+                <div class="text-center p-6 slide-in-right stagger-3">
+                    <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-8 bounce-in border border-neutral-200">
+                        <i class="fas fa-cogs text-neutral-900 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-neutral-900 mb-4 leading-tight">
+                        Can it scale with multiple hardware configurations?
+                    </h3>
+                    <p class="text-sm text-neutral-600 leading-relaxed">
+                        Hardware-agnostic platform supporting 20+ drone manufacturers and unlimited scaling.
+                    </p>
+                </div>
+                
+                <div class="text-center p-6 slide-in-right stagger-4">
+                    <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-8 bounce-in border border-neutral-200">
+                        <i class="fas fa-clock text-neutral-900 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-neutral-900 mb-4 leading-tight">
+                        Will it deliver reliable autonomous operations 24/7?
+                    </h3>
+                    <p class="text-sm text-neutral-600 leading-relaxed">
+                        99.9% uptime SLA with AI-powered predictive maintenance and real-time monitoring.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Introduction -->
+    <section class="bg-white py-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-20 items-center">
+                <div class="slide-in-left">
+                    <div class="flex items-center mb-8">
+                        <div class="w-1 h-10 bg-brand mr-4"></div>
+                        <h2 class="text-4xl lg:text-5xl font-light text-neutral-900">
+                            Meet <span class="text-neutral-900 font-semibold pulse-gentle">CBI</span>
+                        </h2>
+                    </div>
+                    <p class="text-lg text-neutral-600 mb-8 leading-relaxed font-light">
+                        The world's most advanced enterprise AI platform for autonomous drone operations. 
+                        Built from the ground up for enterprise data security, regulatory compliance, 
+                        and seamless integration with your existing workflows.
+                    </p>
+                    <div class="space-y-6 mb-10">
+                        <div class="flex items-start fade-in stagger-1">
+                            <div class="perfect-dot"></div>
+                            <div>
+                                <h4 class="font-medium text-neutral-900 mb-2">AI-Powered Autonomy</h4>
+                                <p class="text-neutral-600">Advanced machine learning algorithms ensure optimal flight paths and real-time decision making.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start fade-in stagger-2">
+                            <div class="perfect-dot"></div>
+                            <div>
+                                <h4 class="font-medium text-neutral-900 mb-2">Enterprise Security</h4>
+                                <p class="text-neutral-600">Bank-grade encryption and compliance with international data protection standards.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start fade-in stagger-3">
+                            <div class="perfect-dot"></div>
+                            <div>
+                                <h4 class="font-medium text-neutral-900 mb-2">BVLOS Compliance</h4>
+                                <p class="text-neutral-600">Built-in regulatory compliance for Beyond Visual Line of Sight operations worldwide.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="bg-brand hover:bg-brand-light text-white px-8 py-4 rounded-trimble font-medium text-lg transition-colors duration-300">
+                        Get Started - It's Free
+                    </button>
+                </div>
+                
+                <div class="lg:pl-8 slide-in-right">
+                    <img src="platform-architecture.png" 
+                         alt="CBI Platform Architecture" 
+                         class="w-full h-96 lg:h-[500px] object-cover rounded-trimble">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Integration Modules -->
+    <section class="bg-neutral-100 py-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 slide-in-right">
+                <div class="flex items-center justify-center mb-8">
+                    <div class="w-1 h-8 bg-brand mr-4"></div>
+                    <h2 class="text-3xl lg:text-4xl font-light text-neutral-900">
+                        Seamless <span class="font-semibold">Third-Party</span> Integrations
+                    </h2>
+                </div>
+                <p class="text-lg text-neutral-600 max-w-3xl mx-auto font-light">
+                    Connect with leading industry applications and extend your drone operations ecosystem
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div class="bg-white p-8 rounded-trimble hover-subtle slide-in-right stagger-1 border border-neutral-200">
+                    <div class="w-12 h-12 rounded-trimble flex items-center justify-center mb-6 border border-neutral-200">
+                        <i class="fas fa-database text-neutral-900 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-medium text-neutral-900 mb-4">Data Processing</h3>
+                    <p class="text-neutral-600 mb-4">Advanced analytics and AI-powered insights from your drone data</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">AWS</span>
+                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">Azure</span>
+                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">Google Cloud</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-trimble hover-subtle slide-in-right stagger-2 border border-neutral-200">
+                    <div class="w-12 h-12 rounded-trimble flex items-center justify-center mb-6 border border-neutral-200">
+                        <i class="fas fa-route text-neutral-900 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-medium text-neutral-900 mb-4">UTM Integration</h3>
+                    <p class="text-neutral-600 mb-4">Unmanned Traffic Management for safe airspace coordination</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">AirMap</span>
+                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">Skyward</span>
+                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">AirHub</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-trimble hover-subtle slide-in-right stagger-3 border border-neutral-200">
+                    <div class="w-12 h-12 rounded-trimble flex items-center justify-center mb-6 border border-neutral-200">
+                        <i class="fas fa-video text-neutral-900 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-medium text-neutral-900 mb-4">Live Streaming</h3>
+                    <p class="text-neutral-600 mb-4">Real-time video streaming and remote monitoring capabilities</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">RTMP</span>
+                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">WebRTC</span>
+                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">HLS</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-trimble hover-subtle slide-in-right stagger-4 border border-neutral-200">
+                    <div class="w-12 h-12 rounded-trimble flex items-center justify-center mb-6 border border-neutral-200">
+                        <i class="fas fa-tasks text-neutral-900 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-medium text-neutral-900 mb-4">Mission & Logs</h3>
+                    <p class="text-neutral-600 mb-4">Comprehensive mission planning and flight data logging</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">QGroundControl</span>
+                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">Mission Planner</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-trimble hover-subtle slide-in-left stagger-1 border border-neutral-200">
+                    <div class="w-12 h-12 rounded-trimble flex items-center justify-center mb-6 border border-neutral-200">
+                        <i class="fas fa-satellite text-neutral-900 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-medium text-neutral-900 mb-4">DAAM Integration</h3>
+                    <p class="text-neutral-600 mb-4">Digital Asset & Airspace Management for enterprise operations</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">Remote ID</span>
+                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">LAANC</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-trimble hover-subtle slide-in-left stagger-2 border border-neutral-200">
+                    <div class="w-12 h-12 rounded-trimble flex items-center justify-center mb-6 border border-neutral-200">
+                        <i class="fas fa-plane text-neutral-900 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-medium text-neutral-900 mb-4">Flight Tracking</h3>
+                    <p class="text-neutral-600 mb-4">Real-time flight tracking and monitoring systems</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">FlightAware</span>
+                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">FlightRadar24</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Shield Module -->
+    <section class="bg-white py-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-20 items-center">
+                <div class="slide-in-left">
+                    <div class="mb-6 fade-in">
+                        <div class="flex items-center">
+                            <div class="w-1 h-8 bg-brand mr-4"></div>
+                            <h2 class="text-3xl lg:text-4xl font-light text-neutral-900">
+                                <span class="font-semibold">CBI</span> Shield
+                            </h2>
+                        </div>
+                    </div>
+                    
+                    <p class="text-lg text-neutral-600 mb-8 leading-relaxed fade-in stagger-1 font-light">
+                        Enterprise-grade security designed for the most demanding regulatory environments. 
+                        Deploy with confidence across cloud, hybrid, or air-gapped infrastructures.
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-10">
+                        <div class="border border-neutral-200 rounded-trimble p-6 hover-subtle">
+                            <div class="w-10 h-10 rounded-trimble flex items-center justify-center mb-4 border border-neutral-200">
+                                <i class="fas fa-cloud text-neutral-900"></i>
+                            </div>
+                            <h4 class="font-semibold text-neutral-900 mb-2">Cloud</h4>
+                            <p class="text-neutral-600 text-sm">Scalable cloud deployment with global redundancy</p>
+                        </div>
+                        
+                        <div class="border border-neutral-200 rounded-trimble p-6 hover-subtle">
+                            <div class="w-10 h-10 rounded-trimble flex items-center justify-center mb-4 border border-neutral-200">
+                                <i class="fas fa-globe text-neutral-900"></i>
+                            </div>
+                            <h4 class="font-semibold text-neutral-900 mb-2">In-Country Cloud</h4>
+                            <p class="text-neutral-600 text-sm">Data sovereignty compliance with local hosting</p>
+                        </div>
+                        
+                        <div class="border border-neutral-200 rounded-trimble p-6 hover-subtle">
+                            <div class="w-10 h-10 rounded-trimble flex items-center justify-center mb-4 border border-neutral-200">
+                                <i class="fas fa-server text-neutral-900"></i>
+                            </div>
+                            <h4 class="font-semibold text-neutral-900 mb-2">On-Premises</h4>
+                            <p class="text-neutral-600 text-sm">Complete control with private infrastructure</p>
+                        </div>
+                        
+                        <div class="border border-neutral-200 rounded-trimble p-6 hover-subtle">
+                            <div class="w-10 h-10 rounded-trimble flex items-center justify-center mb-4 border border-neutral-200">
+                                <i class="fas fa-lock text-neutral-900"></i>
+                            </div>
+                            <h4 class="font-semibold text-neutral-900 mb-2">Air-Gapped</h4>
+                            <p class="text-neutral-600 text-sm">Maximum security for sensitive operations</p>
+                        </div>
+                    </div>
+
+                </div>
+                
+                <div>
+                    <img src="data-security.png" 
+                         alt="Enterprise Security" 
+                         class="w-full h-96 lg:h-[500px] object-cover rounded-trimble">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BVLOS Compliance -->
+    <section class="bg-neutral-100 py-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 slide-in-left">
+                <div class="flex items-center justify-center mb-8">
+                    <div class="w-1 h-8 bg-brand mr-4"></div>
+                    <h2 class="text-3xl lg:text-4xl font-light text-neutral-900">
+                        <span class="font-semibold">BVLOS</span> Compliance Built-In
+                    </h2>
+                </div>
+                <p class="text-lg text-neutral-600 max-w-3xl mx-auto font-light">
+                    Advanced risk mitigation and regulatory compliance for Beyond Visual Line of Sight operations
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-4 gap-12">
+                <div class="text-center slide-in-left stagger-1">
+                    <div class="w-20 h-20 rounded-trimble flex items-center justify-center mx-auto mb-6 hover-subtle border border-neutral-200">
+                        <i class="fas fa-map-marked-alt text-neutral-900 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-neutral-900 mb-4">Ground Risk Mitigation</h3>
+                    <p class="text-neutral-600">
+                        Advanced terrain analysis and population density mapping for safe flight corridor planning
+                    </p>
+                </div>
+                
+                <div class="text-center slide-in-left stagger-2">
+                    <div class="w-20 h-20 rounded-trimble flex items-center justify-center mx-auto mb-6 hover-subtle border border-neutral-200">
+                        <i class="fas fa-plane text-neutral-900 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-neutral-900 mb-4">Air Risk Mitigation</h3>
+                    <p class="text-neutral-600">
+                        Real-time airspace monitoring and collision avoidance with manned aircraft integration
+                    </p>
+                </div>
+                
+                <div class="text-center slide-in-left stagger-3">
+                    <div class="w-20 h-20 rounded-trimble flex items-center justify-center mx-auto mb-6 hover-subtle border border-neutral-200">
+                        <i class="fas fa-sitemap text-neutral-900 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-neutral-900 mb-4">One-to-Many Ops</h3>
+                    <p class="text-neutral-600">
+                        Single operator managing multiple drone operations with automated coordination
+                    </p>
+                </div>
+                
+                <div class="text-center slide-in-left stagger-4">
+                    <div class="w-20 h-20 rounded-trimble flex items-center justify-center mx-auto mb-6 hover-subtle border border-neutral-200">
+                        <i class="fas fa-hands-helping text-neutral-900 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-neutral-900 mb-4">BVLOS Assistance</h3>
+                    <p class="text-neutral-600">
+                        Dedicated support program for regulatory approvals and compliance documentation
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hardware Compatibility -->
+    <section class="bg-white py-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 slide-in-right">
+                <div class="flex items-center justify-center mb-8">
+                    <div class="w-1 h-8 bg-brand mr-4"></div>
+                    <h2 class="text-3xl lg:text-4xl font-light text-neutral-900">
+                        <span class="font-semibold">20+</span> Hardware Options
+                    </h2>
+                </div>
+                <p class="text-lg text-neutral-600 max-w-3xl mx-auto font-light">
+                    Compatible with leading drone, dock, and payload manufacturers worldwide
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-16">
+                <div class="text-center slide-in-right stagger-1">
+                    <div class="w-16 h-16 rounded-trimble flex items-center justify-center mx-auto mb-6 border border-neutral-200">
+                        <i class="fas fa-helicopter text-neutral-900 text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-neutral-900 mb-6">Drones</h3>
+                    <div class="space-y-3">
+                        <div class="border border-neutral-200 p-4 rounded-trimble">DJI Matrice Series</div>
+                        <div class="border border-neutral-200 p-4 rounded-trimble">Autel EVO Series</div>
+                        <div class="border border-neutral-200 p-4 rounded-trimble">Parrot ANAFI Series</div>
+                        <div class="border border-neutral-200 p-4 rounded-trimble">Skydio Enterprise</div>
+                        <div class="border border-neutral-200 p-4 rounded-trimble">Wingtra WingtraOne</div>
+                        <div class="border border-neutral-200 p-4 rounded-trimble">senseFly eBee Series</div>
+                    </div>
+                </div>
+                
+                <div class="text-center slide-in-right stagger-2">
+                    <div class="w-16 h-16 rounded-trimble flex items-center justify-center mx-auto mb-6 border border-neutral-200">
+                        <i class="fas fa-warehouse text-neutral-900 text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-neutral-900 mb-6">Docks</h3>
+                    <div class="space-y-3">
+                        <div class="border border-neutral-200 p-4 rounded-trimble">DJI Dock 2</div>
+                        <div class="border border-neutral-200 p-4 rounded-trimble">Skydio Dock</div>
+                        <div class="border border-neutral-200 p-4 rounded-trimble">Percepto AirMax</div>
+                        <div class="border border-neutral-200 p-4 rounded-trimble">Easy Aerial Sentry</div>
+                        <div class="border border-neutral-200 p-4 rounded-trimble">Airobotics Optimus</div>
+                        <div class="border border-neutral-200 p-4 rounded-trimble">FlytBase Dock</div>
+                    </div>
+                </div>
+                
+                <div class="text-center slide-in-right stagger-3">
+                    <div class="w-16 h-16 rounded-trimble flex items-center justify-center mx-auto mb-6 border border-neutral-200">
+                        <i class="fas fa-camera text-neutral-900 text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-neutral-900 mb-6">Payloads</h3>
+                    <div class="space-y-3">
+                        <div class="border border-neutral-200 p-4 rounded-trimble">FLIR Thermal Cameras</div>
+                        <div class="border border-neutral-200 p-4 rounded-trimble">LiDAR Sensors</div>
+                        <div class="border border-neutral-200 p-4 rounded-trimble">Multispectral Cameras</div>
+                        <div class="border border-neutral-200 p-4 rounded-trimble">Gas Detection Sensors</div>
+                        <div class="border border-neutral-200 p-4 rounded-trimble">Zoom Cameras</div>
+                        <div class="border border-neutral-200 p-4 rounded-trimble">Custom Payloads</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Industry Applications -->
+    <section class="bg-neutral-100 py-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 slide-in-left">
+                <div class="flex items-center justify-center mb-8">
+                    <div class="w-1 h-8 bg-brand mr-4"></div>
+                    <h2 class="text-3xl lg:text-4xl font-light text-neutral-900">
+                        <span class="font-semibold">Single Platform</span>. Multiple Industries.
+                    </h2>
+                </div>
+                <p class="text-lg text-neutral-600 max-w-3xl mx-auto font-light">
+                    Tailored solutions for diverse industry needs with specialized workflows and analytics
+                </p>
+            </div>
+            
+            <div class="bg-white rounded-trimble overflow-hidden slide-in-left">
+                <div class="flex flex-wrap border-b border-neutral-200">
+                    <button class="px-6 py-4 text-brand border-b-2 border-brand font-semibold bg-brand/5">Oil & Gas</button>
+                    <button class="px-6 py-4 text-neutral-600 hover:text-brand hover:bg-neutral-50 transition-colors">Mining</button>
+                    <button class="px-6 py-4 text-neutral-600 hover:text-brand hover:bg-neutral-50 transition-colors">Agriculture</button>
+                    <button class="px-6 py-4 text-neutral-600 hover:text-brand hover:bg-neutral-50 transition-colors">Public Safety</button>
+                    <button class="px-6 py-4 text-neutral-600 hover:text-brand hover:bg-neutral-50 transition-colors">Solar</button>
+                    <button class="px-6 py-4 text-neutral-600 hover:text-brand hover:bg-neutral-50 transition-colors">Construction</button>
+                </div>
+                
+                <div class="p-8 lg:p-12">
+                    <div class="grid lg:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <h3 class="text-2xl font-bold text-neutral-900 mb-6">Oil & Gas Operations</h3>
+                            <div class="space-y-4 mb-8">
+                                <div class="flex items-start">
+                                    <div class="perfect-dot"></div>
+                                    <p class="text-neutral-700">Pipeline inspection and leak detection with thermal imaging</p>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="perfect-dot"></div>
+                                    <p class="text-neutral-700">Offshore platform monitoring and safety compliance</p>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="perfect-dot"></div>
+                                    <p class="text-neutral-700">Environmental monitoring and spill response</p>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="perfect-dot"></div>
+                                    <p class="text-neutral-700">Asset integrity management and predictive maintenance</p>
+                                </div>
+                            </div>
+                            <div class="bg-neutral-50 p-6 rounded-trimble">
+                                <h4 class="font-semibold text-neutral-900 mb-2">ROI Impact</h4>
+                                <p class="text-brand text-2xl font-bold">65% reduction</p>
+                                <p class="text-neutral-600">in inspection costs and 40% faster anomaly detection</p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <img src="single-platform-multiple-industries.jpg" 
+                                 alt="Single Platform Multiple Industries" 
+                                 class="w-full h-80 object-cover rounded-trimble">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partner Network -->
+    <section class="bg-white py-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 slide-in-right">
+                <div class="flex items-center justify-center mb-8">
+                    <div class="w-1 h-8 bg-brand mr-4"></div>
+                    <h2 class="text-3xl lg:text-4xl font-light text-neutral-900">
+                        <span class="font-semibold">Global</span> Partner Network
+                    </h2>
+                </div>
+                <p class="text-lg text-neutral-600 max-w-3xl mx-auto font-light">
+                    Working with certified partners worldwide to deliver localized support and expertise
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-12 mb-20">
+                <div class="text-center slide-in-right stagger-1">
+                    <div class="text-4xl font-bold text-brand mb-2 counter pulse-gentle">150+</div>
+                    <p class="text-xl text-neutral-900 font-semibold mb-2">Certified Partners</p>
+                    <p class="text-neutral-600">Across 45 countries worldwide</p>
+                </div>
+                
+                <div class="text-center slide-in-right stagger-2">
+                    <div class="text-4xl font-bold text-brand mb-2 counter pulse-gentle">24/7</div>
+                    <p class="text-xl text-neutral-900 font-semibold mb-2">Global Support</p>
+                    <p class="text-neutral-600">Round-the-clock technical assistance</p>
+                </div>
+                
+                <div class="text-center slide-in-right stagger-3">
+                    <div class="text-4xl font-bold text-brand mb-2 counter pulse-gentle">99.9%</div>
+                    <p class="text-xl text-neutral-900 font-semibold mb-2">Uptime SLA</p>
+                    <p class="text-neutral-600">Enterprise-grade reliability guarantee</p>
+                </div>
+            </div>
+            
+            <div class="text-center mb-6">
+                <h3 class="text-xl font-semibold text-neutral-900">Find a Partner Near You</h3>
+            </div>
+            <img src="global-partner-network.jpg" 
+                 alt="Global Partner Network Map" 
+                 class="w-full h-80 object-cover rounded-trimble">
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="bg-brand py-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex items-center justify-center mb-8">
+                <div class="w-1 h-8 bg-white mr-4"></div>
+                <h2 class="text-3xl lg:text-4xl font-light text-white">
+                    Ready to deploy <span class="font-semibold">automated drones</span>?
+                </h2>
+            </div>
+            <p class="text-lg text-brand-light mb-12 max-w-2xl mx-auto font-light">
+                Start your journey to autonomous drone operations with our enterprise platform. 
+                No setup fees, cancel anytime.
+            </p>
+            <button class="bg-white hover:bg-brand text-brand hover:text-white px-10 py-4 rounded-trimble font-medium text-lg transition-colors duration-300">
+                Get Started - It's Free
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-neutral-900 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Newsletter -->
+            <div class="border-b border-neutral-700 pb-12 mb-12">
+                <div class="grid lg:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h3 class="text-2xl font-light mb-4">Stay ahead of the curve</h3>
+                        <p class="text-neutral-300">Get the latest drone industry insights and platform updates delivered to your inbox.</p>
+                    </div>
+                    <div>
+                        <div class="flex gap-4">
+                            <input type="email" placeholder="Enter your email" 
+                                   class="flex-1 px-4 py-3 bg-neutral-800 border border-neutral-600 rounded-trimble text-white placeholder-neutral-400 focus:outline-none focus:border-brand">
+                            <button class="bg-brand hover:bg-brand-light px-6 py-3 rounded-trimble font-medium transition-colors">
+                                Subscribe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Links -->
+            <div class="grid lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h4 class="text-lg font-medium mb-6">PLATFORM</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-neutral-300 hover:text-brand transition-colors">Features</a></li>
+                        <li><a href="#" class="text-neutral-300 hover:text-brand transition-colors">Integrations</a></li>
+                        <li><a href="#" class="text-neutral-300 hover:text-brand transition-colors">Security</a></li>
+                        <li><a href="#" class="text-neutral-300 hover:text-brand transition-colors">API Documentation</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-medium mb-6">SOLUTIONS</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-neutral-300 hover:text-brand transition-colors">Oil & Gas</a></li>
+                        <li><a href="#" class="text-neutral-300 hover:text-brand transition-colors">Mining</a></li>
+                        <li><a href="#" class="text-neutral-300 hover:text-brand transition-colors">Agriculture</a></li>
+                        <li><a href="#" class="text-neutral-300 hover:text-brand transition-colors">Public Safety</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-medium mb-6">RESOURCES</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-neutral-300 hover:text-brand transition-colors">Documentation</a></li>
+                        <li><a href="#" class="text-neutral-300 hover:text-brand transition-colors">Case Studies</a></li>
+                        <li><a href="#" class="text-neutral-300 hover:text-brand transition-colors">Blog</a></li>
+                        <li><a href="#" class="text-neutral-300 hover:text-brand transition-colors">Support</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-medium mb-6">COMPANY</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-neutral-300 hover:text-brand transition-colors">About Us</a></li>
+                        <li><a href="#" class="text-neutral-300 hover:text-brand transition-colors">Careers</a></li>
+                        <li><a href="#" class="text-neutral-300 hover:text-brand transition-colors">Partners</a></li>
+                        <li><a href="#" class="text-neutral-300 hover:text-brand transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Bottom Bar -->
+            <div class="border-t border-neutral-700 pt-8">
+                <div class="flex flex-col lg:flex-row justify-between items-center">
+                    <div class="flex items-center mb-4 lg:mb-0">
+                        <img src="logo.png" alt="Company Logo" class="h-6">
+                    </div>
+                    
+                    <div class="flex flex-col lg:flex-row items-center space-y-2 lg:space-y-0 lg:space-x-6">
+                        <div class="flex space-x-6">
+                            <a href="#" class="text-neutral-400 hover:text-brand transition-colors">Privacy Policy</a>
+                            <a href="#" class="text-neutral-400 hover:text-brand transition-colors">Terms of Service</a>
+                            <a href="#" class="text-neutral-400 hover:text-brand transition-colors">Cookie Policy</a>
+                        </div>
+                        <div class="text-neutral-400 text-sm">
+                            © 2024 DroneFlow. All rights reserved.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 简洁滚动动画系统
+        class AnimationController {
+            constructor() {
+                this.observerOptions = {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                this.createObservers();
+                this.setupNavigation();
+                this.setupSpecialEffects();
+            }
+            
+            createObservers() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, this.observerOptions);
+
+                // 观察滑入动画元素
+                document.querySelectorAll('.slide-in-left, .slide-in-right').forEach(el => observer.observe(el));
+            }
+            
+
+            
+            setupNavigation() {
+                // 导航栏滚动控制
+                let lastScrollY = window.scrollY;
+                let ticking = false;
+
+                const updateNavbar = () => {
+                    const navbar = document.getElementById('navbar');
+                    const currentScrollY = window.scrollY;
+                    
+                    if (currentScrollY < 10) {
+                        navbar.classList.remove('navbar-hidden');
+                        navbar.classList.add('navbar-visible');
+                    } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                        navbar.classList.remove('navbar-visible');
+                        navbar.classList.add('navbar-hidden');
+                    } else if (currentScrollY < lastScrollY) {
+                        navbar.classList.remove('navbar-hidden');
+                        navbar.classList.add('navbar-visible');
+                    }
+                    
+                    lastScrollY = currentScrollY;
+                    ticking = false;
+                };
+
+                const requestUpdateNavbar = () => {
+                    if (!ticking) {
+                        requestAnimationFrame(updateNavbar);
+                        ticking = true;
+                    }
+                };
+
+                window.addEventListener('scroll', requestUpdateNavbar);
+                
+                // 平滑滚动
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const target = document.querySelector(anchor.getAttribute('href'));
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    });
+                });
+            }
+            
+            setupSpecialEffects() {
+                // 行业标签切换
+                document.querySelectorAll('button[class*="px-6 py-4"]').forEach(button => {
+                    button.addEventListener('click', function() {
+                        // 移除所有活跃状态
+                        document.querySelectorAll('button[class*="px-6 py-4"]').forEach(btn => {
+                            btn.className = 'px-6 py-4 text-neutral-600 hover:text-brand hover:bg-neutral-50 transition-colors';
+                        });
+                        
+                        // 添加活跃状态到点击的标签
+                        this.className = 'px-6 py-4 text-brand border-b-2 border-brand font-semibold bg-brand/5';
+                    });
+                });
+            }
+            
+
+        }
+        
+        // 页面加载完成后初始化动画控制器
+        document.addEventListener('DOMContentLoaded', () => {
+            new AnimationController();
+        });
+    </script>
+</body>
+</html> 
