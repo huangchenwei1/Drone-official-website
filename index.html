@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth bg-black">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +24,7 @@
                         'extrabold': '800',
                     },
                     colors: {
-                        'brand': '#028985',
+                        'brand': '#009BA2',
                         'brand-light': '#0ABAB5',
                         'neutral-50': '#fafafa',
                         'neutral-100': '#f5f5f5',
@@ -32,10 +32,10 @@
                         'neutral-300': '#d4d4d4',
                         'neutral-400': '#a3a3a3',
                         'neutral-500': '#737373',
-                        'neutral-600': '#525252',
-                        'neutral-700': '#404040',
-                        'neutral-800': '#262626',
-                        'neutral-900': '#171717',
+                        'neutral-600': '#BABCBE',
+                        'neutral-700': 'rgba(255, 255, 255, 0.1)',
+                        'neutral-800': 'rgba(255, 255, 255, 0.06)',
+                        'neutral-900': '#151515',
                     },
                     spacing: {
                         '18': '4.5rem',
@@ -46,33 +46,41 @@
                         '38': '9.5rem',
                     },
                     borderRadius: {
-                        'trimble': '4px',
+                        'trimble': '0px',
                     }
                 }
             }
         }
     </script>
     <style>
-        .hero-background {
-            background-image: url('./hero-background.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            position: relative;
+        /* 全局暗主题背景 */
+        body {
+            background-color: #000000;
+            color: #ffffff;
         }
-        .hero-background::before {
-            content: '';
+        
+        .hero-background {
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-video {
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 1;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
         }
         .hero-content {
             position: relative;
             z-index: 2;
+        }
+        
+        /* 前景图中间视频 - 响应式缩放 */
+        .hero-overlay-video {
+            width: calc(2300px * var(--hero-scale, 1));
+            height: calc(1565px * var(--hero-scale, 1));
         }
         .navbar-hidden {
             transform: translateY(-100%);
@@ -88,7 +96,251 @@
             text-shadow: 0 4px 8px rgba(0,0,0,0.7);
         }
         .hero-text-shadow {
-            text-shadow: 0 2px 10px rgba(0,0,0,0.8), 0 4px 20px rgba(0,0,0,0.5);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 浮动动画 - 组合淡入和浮动 */
+        .floating {
+            animation: fadeInFloat 0.8s ease forwards, floatingContinuous 3s ease-in-out infinite;
+            animation-delay: 0s, 1.7s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .floating-delay-1 {
+            animation: fadeInFloat 0.8s ease forwards, floatingContinuous 3.5s ease-in-out infinite;
+            animation-delay: 0.2s, 1.9s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .floating-delay-2 {
+            animation: fadeInFloat 0.8s ease forwards, floatingContinuous 4s ease-in-out infinite;
+            animation-delay: 0.4s, 2.1s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        @keyframes fadeInFloat {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes floatingContinuous {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        /* 行业卡片容器 */
+        .industry-container {
+            display: flex;
+            gap: 0.5rem;
+            width: 100%;
+            align-items: flex-end;
+            height: 28rem;
+            position: relative;
+        }
+        
+        /* 行业项目容器 */
+        .industry-item {
+            flex: 1;
+            min-width: 0;
+            transition: flex 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .industry-item:hover,
+        .industry-item.industry-active {
+            flex: 1.5;
+        }
+        
+        .industry-container:hover .industry-item:not(:hover) {
+            flex: 0.875;
+        }
+        
+        .industry-container:not(:hover) .industry-item:not(.industry-active) {
+            flex: 0.875;
+        }
+        
+        /* 行业卡片动画效果 */
+        .industry-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: grayscale(100%) saturate(0);
+            height: 24rem;
+            width: 100%;
+            align-self: flex-end;
+        }
+        
+        .industry-item:hover .industry-card,
+        .industry-item.industry-active .industry-card {
+            height: 28rem;
+            filter: grayscale(0%) saturate(120%);
+            z-index: 10;
+        }
+        
+        .industry-item:hover .industry-overlay,
+        .industry-item.industry-active .industry-overlay {
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 100%);
+        }
+        
+        .industry-item:hover .industry-border,
+        .industry-item.industry-active .industry-border {
+            opacity: 1;
+        }
+        
+        .industry-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%);
+            transition: all 0.4s ease;
+        }
+        
+        .industry-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            color: white;
+            z-index: 5;
+        }
+        
+        .industry-border {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #028985 0%, #0ABAB5 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .industry-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        
+        .industry-description {
+            margin-top: 1rem;
+            height: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        /* 移动端行业轮播 */
+        .industry-carousel {
+            display: flex;
+            transition: transform 0.3s ease-in-out;
+            width: 500%; /* 5个卡片 × 100% */
+            height: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            .industry-carousel {
+                display: flex !important;
+                transition: transform 0.3s ease-in-out;
+                width: 500% !important; /* 5个卡片 × 100% */
+                height: 100% !important;
+            }
+            
+            .industry-carousel .industry-item {
+                flex: none !important;
+                width: 20% !important;
+                min-width: 20% !important;
+                height: 100% !important;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+            
+            .industry-card {
+                height: 300px !important;
+                filter: grayscale(0%) saturate(120%) !important;
+            }
+            
+            .industry-overlay {
+                background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 100%) !important;
+            }
+            
+            .industry-border {
+                opacity: 1 !important;
+            }
+            
+            .industry-description {
+                display: none;
+            }
+            
+            /* 轮播导航按钮 */
+            .industry-nav-btn {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background: rgba(0, 0, 0, 0.7);
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 48px;
+                height: 48px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                z-index: 10;
+            }
+            
+            .industry-nav-btn:hover {
+                background: rgba(2, 137, 133, 0.9);
+            }
+            
+            .industry-nav-prev {
+                left: 16px;
+            }
+            
+            .industry-nav-next {
+                right: 16px;
+            }
+            
+            /* 轮播指示器 */
+            .industry-indicators {
+                position: absolute;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                display: flex;
+                gap: 6px;
+                z-index: 10;
+            }
+            
+            .industry-indicator {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.4);
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            
+            .industry-indicator.active {
+                background: white;
+            }
         }
 
         /* 基础动画类 */
@@ -97,14 +349,68 @@
             transform: translateY(20px);
             animation: fadeInUp 0.8s ease forwards;
         }
-
+        
+        /* 交错动画延迟 */
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        .stagger-5 { transition-delay: 0.5s; }
+        .stagger-6 { transition-delay: 0.6s; }
+        .stagger-7 { transition-delay: 0.7s; }
+        .stagger-8 { transition-delay: 0.8s; }
+        .stagger-9 { transition-delay: 0.9s; }
+        
         @keyframes fadeInUp {
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
+        
+        /* 悬停效果 */
+        .hover-subtle {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hover-subtle:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* 滑入动画 - 新的简洁效果 */
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.6s ease-out;
+        }
 
+        .slide-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.6s ease-out;
+        }
+
+        .slide-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+        
+        .slide-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
         .slide-in-left {
             opacity: 0;
             transform: translateX(-30px);
@@ -132,162 +438,32 @@
         .stagger-2 { animation-delay: 0.2s; }
         .stagger-3 { animation-delay: 0.3s; }
         .stagger-4 { animation-delay: 0.4s; }
-
-        /* 卡片悬停效果 */
-        .hover-lift {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
-
-        .hover-lift:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        
+        @keyframes slideInRight {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
-
-        /* 简洁的卡片悬停效果 */
-        .hover-subtle {
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
-        }
-
-        .hover-subtle:hover {
-            border-color: #171717;
-        }
-
-        /* 按钮动画 */
-        .btn-animate {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .btn-animate::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .btn-animate:hover::before {
-            left: 100%;
-        }
-
-        .btn-animate:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-        }
-
-        /* 图标动画 */
-        .icon-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .icon-hover:hover {
-            transform: rotate(10deg) scale(1.15);
-            color: #0ABAB5;
-        }
-
-        /* 微动画 */
-        .float {
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-        }
-
-        .pulse-gentle {
-            animation: pulseGentle 4s ease-in-out infinite;
-        }
-
-        @keyframes pulseGentle {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.9; }
-        }
-
-        /* 文字动画 */
-        .text-reveal {
-            overflow: hidden;
-        }
-
-        .text-reveal span {
-            display: inline-block;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: textReveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        @keyframes textReveal {
+        
+        @keyframes slideInUp {
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        /* 边框动画 */
-        .border-animate {
-            position: relative;
-        }
-
-        .border-animate::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border: 2px solid transparent;
-            border-radius: inherit;
-            background: linear-gradient(45deg, #028985, #0ABAB5) border-box;
-            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: subtract;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .border-animate:hover::before {
-            opacity: 1;
-        }
-
-        /* 渐变背景动画 */
-        .gradient-bg {
-            background: linear-gradient(45deg, #028985, #0ABAB5, #028985);
-            background-size: 300% 300%;
-            animation: gradientShift 4s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        /* 数字计数动画 */
-        .counter {
-            font-variant-numeric: tabular-nums;
-        }
-
-        /* 加载动画 */
-        .loading-dots::after {
-            content: '';
-            animation: dots 2s linear infinite;
-        }
-
-        @keyframes dots {
-            0%, 20% { content: ''; }
-            40% { content: '.'; }
-            60% { content: '..'; }
-            80%, 100% { content: '...'; }
-        }
-
         /* 英雄区专用动画 */
         .hero-content {
             animation: heroFadeIn 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
-
+        
         @keyframes heroFadeIn {
             0% {
                 opacity: 0;
@@ -298,75 +474,27 @@
                 transform: translateY(0);
             }
         }
-
-        /* 弹跳效果 */
-        .bounce-in {
-            animation: bounceIn 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        @keyframes bounceIn {
-            0% {
-                transform: scale(0.3);
-                opacity: 0;
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .screen-container .absolute {
+                display: none;
             }
-            50% {
-                transform: scale(1.05);
+            
+            .screen-container .absolute.main-screen {
+                display: block;
+                position: relative;
+                left: auto;
+                transform: none;
+                margin: 2rem auto;
             }
-            70% {
-                transform: scale(0.9);
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        /* 完美圆点 */
-        .perfect-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #028985;
-            border-radius: 50%;
-            flex-shrink: 0;
-            margin-right: 12px;
-            margin-top: 0.6em;
         }
     </style>
 </head>
-<body class="font-sans text-neutral-800 antialiased">
+<body class="font-sans text-white antialiased">
     <!-- Navigation -->
-    <header id="navbar" class="bg-white sticky top-0 z-50 navbar-transition navbar-visible">
-        <!-- Top Bar -->
-        <div class="bg-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-12">
-                    <!-- Left Side - Company Info -->
-                    <div class="flex items-center space-x-6 text-sm">
-                        <!-- Empty space to maintain layout balance -->
-                    </div>
-                    
-                    <!-- Right Side - Utilities -->
-                    <div class="flex items-center space-x-6">
-                        <!-- Language Selector -->
-                        <div class="flex items-center space-x-2 text-sm">
-                            <span class="text-neutral-600">EN</span>
-                            <span class="text-neutral-300">|</span>
-                            <span class="text-neutral-400">ES</span>
-                        </div>
-                        
-                        <!-- Search -->
-                        <button class="text-neutral-500 hover:text-neutral-900 transition-colors">
-                            <i class="fas fa-search text-sm"></i>
-                        </button>
-                        
-
-                        
-                        <!-- User Account -->
-                        <a href="#login" class="text-neutral-600 hover:text-neutral-900 transition-colors text-sm font-normal">Log in</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <header id="navbar" class="bg-black sticky top-0 z-50 navbar-transition navbar-visible">
+        
         
         <!-- Main Navigation -->
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -374,32 +502,32 @@
                 <!-- Logo -->
                 <div class="flex-shrink-0">
                     <div class="flex items-center">
-                        <img src="logo.png" alt="Company Logo" class="h-8">
+                        <img src="logo new@6x.png" alt="Company Logo" class="h-6">
                     </div>
                 </div>
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden lg:flex items-center space-x-12">
                     <div class="relative group">
-                        <a href="#industries" class="text-neutral-700 hover:text-brand transition-colors font-normal uppercase text-sm tracking-wide flex items-center">
+                        <a href="#industries" class="text-white hover:text-brand transition-colors font-normal uppercase text-sm tracking-wide flex items-center">
                             INDUSTRIES
                             <i class="fas fa-chevron-down ml-2 text-xs opacity-60"></i>
                         </a>
                     </div>
                     <div class="relative group">
-                        <a href="#products" class="text-neutral-700 hover:text-brand transition-colors font-normal uppercase text-sm tracking-wide flex items-center">
+                        <a href="#products" class="text-white hover:text-brand transition-colors font-normal uppercase text-sm tracking-wide flex items-center">
                             PRODUCTS
                             <i class="fas fa-chevron-down ml-2 text-xs opacity-60"></i>
                         </a>
                     </div>
                     <div class="relative group">
-                        <a href="#resources" class="text-neutral-700 hover:text-brand transition-colors font-normal uppercase text-sm tracking-wide flex items-center">
+                        <a href="#resources" class="text-white hover:text-brand transition-colors font-normal uppercase text-sm tracking-wide flex items-center">
                             RESOURCES
                             <i class="fas fa-chevron-down ml-2 text-xs opacity-60"></i>
                         </a>
                     </div>
                     <div class="relative group">
-                        <a href="#events" class="text-neutral-700 hover:text-brand transition-colors font-normal uppercase text-sm tracking-wide">
+                        <a href="#events" class="text-white hover:text-brand transition-colors font-normal uppercase text-sm tracking-wide">
                             EVENTS
                         </a>
                     </div>
@@ -407,14 +535,14 @@
                 
                 <!-- Right Side Actions -->
                 <div class="hidden lg:flex items-center space-x-4">
-                    <button class="border border-neutral-900 hover:bg-neutral-900 text-neutral-900 hover:text-white px-6 py-3 rounded-trimble font-medium transition-colors text-sm uppercase tracking-wide">
-                        CONTACT SALES
-                    </button>
+                    <a href="#contact" class="border border-white hover:bg-white text-white hover:text-black px-6 py-3 rounded-trimble font-medium transition-colors text-sm uppercase tracking-wide inline-block">
+                        CONTACT US
+                    </a>
                 </div>
                 
                 <!-- Mobile menu button -->
                 <div class="lg:hidden">
-                    <button type="button" class="text-neutral-700 hover:text-brand focus:outline-none">
+                    <button type="button" class="text-white hover:text-brand focus:outline-none">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
                 </div>
@@ -423,664 +551,591 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="hero-background py-32 lg:py-40 min-h-screen flex items-center">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div class="hero-content">
-                <div class="fade-in stagger-1">
-                    <h1 class="text-5xl lg:text-7xl font-light text-white leading-tight mb-8 max-w-3xl">
-                        Enterprise AI Platform for 
-                        <span class="text-white font-normal">Drone Autonomy</span> 
-                        Built for Data Security
+    <section class="relative hero-background" style="min-height: 100vh;">
+        <!-- 背景视频 -->
+        <video class="hero-video" autoplay muted loop playsinline>
+                            <source src="./IMG_0876.MP4" type="video/mp4">
+            <!-- 降级方案 - 如果视频无法加载，显示背景图片 -->
+                          <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('./背景图.png'); background-size: cover; background-position: center;"></div>
+        </video>
+        
+        <!-- 视频暗色遮罩 -->
+        <div class="absolute inset-0 bg-black bg-opacity-40 z-1"></div>
+        
+        <!-- 顶部渐变遮罩 -->
+        <div class="absolute top-0 left-0 right-0 z-5" style="height: 500px; background: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.00) 100%);"></div>
+        
+        <!-- 底部渐变遮罩 -->
+        <div class="absolute bottom-0 left-0 right-0 z-5" style="height: 500px; background: linear-gradient(0deg, #000 0%, rgba(0, 0, 0, 0.00) 100%);"></div>
+        
+        <!-- 主要内容 -->
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col" style="min-height: 124vh;">
+            <!-- 文字内容区域 -->
+            <div class="text-center hero-content pt-20">
+                <div class="fade-in stagger-1 mb-6">
+                    <h1 class="text-6xl font-light text-white leading-tight text-center">
+                        <span class="font-semibold">Autonomous Multi-Agent Inspection, 
+                        Engineered for Real-World Operations</span>
                     </h1>
                 </div>
                 
-                <div class="fade-in stagger-2">
-                    <p class="text-lg lg:text-xl text-neutral-200 mb-12 leading-relaxed max-w-2xl font-light">
-                        AI-driven autonomous drone operations with BVLOS compliance, enterprise-grade IT security, 
-                        and seamless integration capabilities for mission-critical applications.
+                <div class="fade-in stagger-2 mb-10">
+                    <p class="text-xl text-neutral-300 max-w-4xl mx-auto leading-relaxed font-light">
+                        From mission design to system integration and AI optimization, CyberXHub delivers end-to-end autonomous inspection solutions tailored to your environment — across drones, robots, cameras, and intelligent sensors
                     </p>
                 </div>
                 
-                <div class="fade-in stagger-3 flex flex-col sm:flex-row gap-6">
-                    <button class="bg-white hover:bg-brand text-neutral-900 hover:text-white px-10 py-5 rounded-trimble font-medium text-xl transition-all duration-300">
-                        Contact Us
-                    </button>
-                    <button class="border border-white hover:border-brand hover:bg-brand text-white px-10 py-5 rounded-trimble font-medium text-xl transition-all duration-300 flex items-center justify-center">
-                        <i class="fas fa-play mr-3"></i>
-                        Watch Video
-                    </button>
+                <!-- CTA Buttons -->
+                <div class="fade-in stagger-3 flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="https://tally.so/r/npql1V" target="_blank" class="bg-white hover:bg-neutral-100 text-neutral-900 px-8 py-3 font-medium text-base transition-all duration-300 shadow-lg hover:shadow-xl inline-block text-center">
+                        Book a demo
+                    </a>
+                    <a href="#platform-architecture" class="border border-white text-white hover:bg-white hover:text-neutral-900 px-8 py-3 font-medium text-base transition-all duration-300 inline-block text-center">
+                        Explore our content
+                    </a>
+                </div>
+            </div>
+            
+            <!-- 前景图片 - 固定在底部 -->
+            <div class="fade-in stagger-4 flex justify-center mt-auto relative" style="padding-bottom: 80px;">
+                <!-- 主前景图 -->
+                <div class="relative">
+                    <img src="./前景图.png" alt="CyberXHub Platform" class="max-w-full h-auto">
+                    <!-- 叠加视频 - 居中顶对齐 -->
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2">
+                        <video 
+                            autoplay 
+                            muted 
+                            loop 
+                            playsinline
+                            class="object-cover hero-overlay-video">
+                            <source src="./画中画视频.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+                
+                <!-- DJI DOCK 5 - 左上角 -->
+                <div class="absolute top-10 left-0  sm:block">
+                    <img src="./DJI DOCK 5@6x.png" alt="DJI DOCK 5" class="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 xl:w-60 xl:h-60 object-cover">
+                </div>
+                
+                <!-- DJI DOCK 4 - 左下角 -->
+                <div class="absolute top-0 right-0  hidden sm:block">
+                    <img src="./DJI DOCK 4@6x.png" alt="DJI DOCK 4" class="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-32 lg:h-32 xl:w-48 xl:h-48 object-cover">
+                </div>
+                
+                <!-- DJI DOCK 7 - 右下角 -->
+                <div class="absolute bottom-0 right-0 hidden sm:block">
+                    <img src="./DJI DOCK 7@6x.png" alt="DJI DOCK 7" class="w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 xl:w-72 xl:h-72 object-cover">
                 </div>
             </div>
         </div>
     </section>
+
 
     <!-- Customer Testimonials Carousel -->
-    <section class="bg-white py-28">
+    <section id="platform-architecture" class="bg-neutral-900 py-28">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-20 slide-in-left">
                 <div class="flex items-center justify-center mb-8">
                     <div class="w-1 h-8 bg-brand mr-4"></div>
-                    <h2 class="text-3xl lg:text-4xl font-light text-neutral-900">
-                        Powering <span class="font-semibold">Mission-Critical</span> Operations Worldwide
+                    <h2 class="text-3xl lg:text-4xl font-light text-white">
+                        Platform  <span class="font-semibold">Architecture</span> 
                     </h2>
                 </div>
-                <p class="text-lg text-neutral-600 max-w-3xl mx-auto font-light">
-                    See how industry leaders are transforming their operations with our autonomous drone platform
+                <p class="text-lg text-neutral-300 max-w-7xl mx-auto font-light">
+                    Seamlessly integrates autonomous drone operations, AI, and security for end-to-end inspection solutions
                 </p>
             </div>
             
-            <div class="grid lg:grid-cols-3 gap-12">
-                <div class="border border-neutral-200 p-8 rounded-trimble hover-subtle bg-white slide-in-left stagger-1">
-                    <div class="flex items-center mb-6">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" 
-                             alt="John Martinez" class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-neutral-100"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mr-4 border-2 border-neutral-100" style="display:none;">
-                            <span class="text-white font-medium text-lg">JM</span>
-                        </div>
-                        <div>
-                            <h4 class="font-medium text-neutral-900">John Martinez</h4>
-                            <p class="text-neutral-600 text-sm">Operations Director, Energy Corp</p>
-                        </div>
-                    </div>
-                    <p class="text-neutral-700 leading-relaxed">
-                        "Real-time video streaming and automated data capture have revolutionized our inspection processes. 
-                        Safety compliance increased by 40% while reducing operational costs."
+            <div class="grid lg:grid-cols-3 gap-4 slide-in-left">
+                <div class="px-4 py-6 rounded-trimble bg-neutral-800 hover:bg-neutral-700 transition-all duration-300">
+                    <h3 class="text-2xl font-regular text-white mb-2">Flight Series</h3>
+                    <p class="text-neutral-600 font-regular leading-relaxed mb-8 text-sm">
+                        Core module for autonomous drone operations - offering advanced flight planning, 
+                        real-time control, 3D mapping, and multi-sensor data collection.
                     </p>
+                                         <div class="flex">
+                         <img src="1.png" 
+                              alt="Feature 1" class="w-24 h-12 rounded-lg object-cover">
+                         <img src="2.png" 
+                              alt="Feature 2" class="w-26 h-12 rounded-lg object-cover">
+                         <img src="3.png" 
+                              alt="Feature 3" class="w-24 h-12 rounded-lg object-cover">
+                     </div>
                 </div>
-                
-                <div class="border border-neutral-200 p-8 rounded-trimble hover-subtle bg-white slide-in-left stagger-2">
-                    <div class="flex items-center mb-6">
-                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face" 
-                             alt="Sarah Chen" class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-neutral-100"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mr-4 border-2 border-neutral-100" style="display:none;">
-                            <span class="text-white font-medium text-lg">SC</span>
-                        </div>
-                        <div>
-                            <h4 class="font-medium text-neutral-900">Sarah Chen</h4>
-                            <p class="text-neutral-600 text-sm">CTO, Infrastructure Solutions</p>
-                        </div>
-                    </div>
-                    <p class="text-neutral-700 leading-relaxed">
-                        "The BVLOS compliance features and enterprise security made deployment seamless. 
-                        Our surveillance operations now run 24/7 with complete confidence."
-                    </p>
-                </div>
-                
-                <div class="border border-neutral-200 p-8 rounded-trimble hover-subtle bg-white slide-in-left stagger-3">
-                    <div class="flex items-center mb-6">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" 
-                             alt="David Thompson" class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-neutral-100"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mr-4 border-2 border-neutral-100" style="display:none;">
-                            <span class="text-white font-medium text-lg">DT</span>
-                        </div>
-                        <div>
-                            <h4 class="font-medium text-neutral-900">David Thompson</h4>
-                            <p class="text-neutral-600 text-sm">Fleet Manager, Mining Operations</p>
-                        </div>
-                    </div>
-                    <p class="text-neutral-700 leading-relaxed">
-                        "Integration with our existing systems was flawless. The AI-driven analytics 
-                        provide insights that have optimized our entire operation workflow."
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Problems Section -->
-    <section class="bg-neutral-100 py-28">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-24 fade-in">
-                <p class="text-sm font-medium text-brand uppercase tracking-widest mb-6">
-                    PLATFORM CAPABILITIES
-                </p>
-                <div class="flex items-center justify-center mb-4">
-                    <div class="w-1 h-8 bg-brand mr-4"></div>
-                    <h2 class="text-3xl lg:text-4xl font-light text-neutral-900">
-                        While selecting a <span class="font-semibold">drone-in-a-box</span> solution, do you often wonder
-                    </h2>
-                </div>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
-                <div class="text-center p-6 slide-in-left stagger-1">
-                    <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-8 bounce-in border border-neutral-200">
-                        <i class="fas fa-shield-alt text-neutral-900 text-2xl"></i>
-                    </div>
-                    <h3 class="text-lg font-medium text-neutral-900 mb-4 leading-tight">
-                        Can it ensure data security and regulatory compliance?
-                    </h3>
-                    <p class="text-sm text-neutral-600 leading-relaxed">
-                        Enterprise-grade security with ISO 27001, SOC 2, and GDPR compliance built-in from day one.
+                <div class="px-4 py-6 rounded-trimble bg-neutral-800 hover:bg-neutral-700 transition-all duration-300">
+                    <h3 class="text-2xl font-regular text-white mb-2">Ground to Air</h3>
+                    <p class="text-neutral-600 font-regular leading-relaxed mb-4 text-sm">
+                        Builds on the Flight module by adding integration with fixed security cameras, 
+                        enabling Al-based object detection and automated air-ground event response workflows.
                     </p>
+                                         <div class="flex">
+                                            <img src="1.png" 
+                                            alt="Feature 1" class="w-30 h-10 rounded-lg object-cover">
+                                       <img src="2.png" 
+                                            alt="Feature 2" class="w-32 h-10 rounded-lg object-cover">
+                                       <img src="3.png" 
+                                            alt="Feature 3" class="w-30 h-10 rounded-lg object-cover">
+                         <img src="4.png" 
+                              alt="Feature 2" class="w-28 h-10 rounded-lg object-cover">
+                     
+                     </div>
                 </div>
-                
-                <div class="text-center p-6 slide-in-left stagger-2">
-                    <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-8 bounce-in border border-neutral-200">
-                        <i class="fas fa-network-wired text-neutral-900 text-2xl"></i>
-                    </div>
-                    <h3 class="text-lg font-medium text-neutral-900 mb-4 leading-tight">
-                        Will it integrate seamlessly with existing IT infrastructure?
-                    </h3>
-                    <p class="text-sm text-neutral-600 leading-relaxed">
-                        API-first architecture with 200+ pre-built integrations and flexible deployment options.
-                    </p>
-                </div>
-                
-                <div class="text-center p-6 slide-in-right stagger-3">
-                    <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-8 bounce-in border border-neutral-200">
-                        <i class="fas fa-cogs text-neutral-900 text-2xl"></i>
-                    </div>
-                    <h3 class="text-lg font-medium text-neutral-900 mb-4 leading-tight">
-                        Can it scale with multiple hardware configurations?
-                    </h3>
-                    <p class="text-sm text-neutral-600 leading-relaxed">
-                        Hardware-agnostic platform supporting 20+ drone manufacturers and unlimited scaling.
-                    </p>
-                </div>
-                
-                <div class="text-center p-6 slide-in-right stagger-4">
-                    <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-8 bounce-in border border-neutral-200">
-                        <i class="fas fa-clock text-neutral-900 text-2xl"></i>
-                    </div>
-                    <h3 class="text-lg font-medium text-neutral-900 mb-4 leading-tight">
-                        Will it deliver reliable autonomous operations 24/7?
-                    </h3>
-                    <p class="text-sm text-neutral-600 leading-relaxed">
-                        99.9% uptime SLA with AI-powered predictive maintenance and real-time monitoring.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Product Introduction -->
-    <section class="bg-white py-28">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-2 gap-20 items-center">
-                <div class="slide-in-left">
-                    <div class="flex items-center mb-8">
-                        <div class="w-1 h-10 bg-brand mr-4"></div>
-                        <h2 class="text-4xl lg:text-5xl font-light text-neutral-900">
-                            Meet <span class="text-neutral-900 font-semibold pulse-gentle">CBI</span>
-                        </h2>
-                    </div>
-                    <p class="text-lg text-neutral-600 mb-8 leading-relaxed font-light">
-                        The world's most advanced enterprise AI platform for autonomous drone operations. 
-                        Built from the ground up for enterprise data security, regulatory compliance, 
-                        and seamless integration with your existing workflows.
+                <div class="border border-neutral-800 px-4 py-6 rounded-trimble bg-neutral-800 hover:bg-neutral-700 transition-all duration-300">
+                    <h3 class="text-2xl font-regular text-white mb-2">Central OS</h3>
+                    <p class="text-neutral-600 font-regular leading-relaxed mb-5 text-sm">
+                        The full orchestration layer that includes all Flight and Ground-to-Air capabilities, and adds integration with 
+                        ground robots, robot dogs, and advanced sensor networks - enabling full-scale autonomous inspection.
                     </p>
-                    <div class="space-y-6 mb-10">
-                        <div class="flex items-start fade-in stagger-1">
-                            <div class="perfect-dot"></div>
-                            <div>
-                                <h4 class="font-medium text-neutral-900 mb-2">AI-Powered Autonomy</h4>
-                                <p class="text-neutral-600">Advanced machine learning algorithms ensure optimal flight paths and real-time decision making.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start fade-in stagger-2">
-                            <div class="perfect-dot"></div>
-                            <div>
-                                <h4 class="font-medium text-neutral-900 mb-2">Enterprise Security</h4>
-                                <p class="text-neutral-600">Bank-grade encryption and compliance with international data protection standards.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start fade-in stagger-3">
-                            <div class="perfect-dot"></div>
-                            <div>
-                                <h4 class="font-medium text-neutral-900 mb-2">BVLOS Compliance</h4>
-                                <p class="text-neutral-600">Built-in regulatory compliance for Beyond Visual Line of Sight operations worldwide.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="bg-brand hover:bg-brand-light text-white px-8 py-4 rounded-trimble font-medium text-lg transition-colors duration-300">
-                        Get Started - It's Free
-                    </button>
+                        <div class="flex">
+                                            
+                                                <img src="1.png" 
+                                                alt="Feature 1" class="w-30 h-7 rounded-lg object-cover">
+                                           <img src="2.png" 
+                                                alt="Feature 2" class="w-32 h-7 rounded-lg object-cover">
+                                           <img src="3.png" 
+                                                alt="Feature 3" class="w-30 h-7 rounded-lg object-cover">
+                             <img src="4.png" 
+                                  alt="Feature 2" class="w-28 h-7 rounded-lg object-cover">
+                         <img src="5.png" 
+                              alt="Feature 3" class="w-30 h-7 rounded-lg object-cover">
+                     </div>
                 </div>
                 
-                <div class="lg:pl-8 slide-in-right">
-                    <img src="platform-architecture.png" 
-                         alt="CBI Platform Architecture" 
-                         class="w-full h-96 lg:h-[500px] object-cover rounded-trimble">
-                </div>
+               
             </div>
-        </div>
-    </section>
 
-    <!-- Integration Modules -->
-    <section class="bg-neutral-100 py-28">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-20 slide-in-right">
-                <div class="flex items-center justify-center mb-8">
-                    <div class="w-1 h-8 bg-brand mr-4"></div>
-                    <h2 class="text-3xl lg:text-4xl font-light text-neutral-900">
-                        Seamless <span class="font-semibold">Third-Party</span> Integrations
-                    </h2>
-                </div>
-                <p class="text-lg text-neutral-600 max-w-3xl mx-auto font-light">
-                    Connect with leading industry applications and extend your drone operations ecosystem
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-                <div class="bg-white p-8 rounded-trimble hover-subtle slide-in-right stagger-1 border border-neutral-200">
-                    <div class="w-12 h-12 rounded-trimble flex items-center justify-center mb-6 border border-neutral-200">
-                        <i class="fas fa-database text-neutral-900 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-medium text-neutral-900 mb-4">Data Processing</h3>
-                    <p class="text-neutral-600 mb-4">Advanced analytics and AI-powered insights from your drone data</p>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">AWS</span>
-                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">Azure</span>
-                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">Google Cloud</span>
-                    </div>
-                </div>
-                
-                <div class="bg-white p-8 rounded-trimble hover-subtle slide-in-right stagger-2 border border-neutral-200">
-                    <div class="w-12 h-12 rounded-trimble flex items-center justify-center mb-6 border border-neutral-200">
-                        <i class="fas fa-route text-neutral-900 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-medium text-neutral-900 mb-4">UTM Integration</h3>
-                    <p class="text-neutral-600 mb-4">Unmanned Traffic Management for safe airspace coordination</p>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">AirMap</span>
-                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">Skyward</span>
-                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">AirHub</span>
-                    </div>
-                </div>
-                
-                <div class="bg-white p-8 rounded-trimble hover-subtle slide-in-right stagger-3 border border-neutral-200">
-                    <div class="w-12 h-12 rounded-trimble flex items-center justify-center mb-6 border border-neutral-200">
-                        <i class="fas fa-video text-neutral-900 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-medium text-neutral-900 mb-4">Live Streaming</h3>
-                    <p class="text-neutral-600 mb-4">Real-time video streaming and remote monitoring capabilities</p>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">RTMP</span>
-                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">WebRTC</span>
-                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">HLS</span>
-                    </div>
-                </div>
-                
-                <div class="bg-white p-8 rounded-trimble hover-subtle slide-in-right stagger-4 border border-neutral-200">
-                    <div class="w-12 h-12 rounded-trimble flex items-center justify-center mb-6 border border-neutral-200">
-                        <i class="fas fa-tasks text-neutral-900 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-medium text-neutral-900 mb-4">Mission & Logs</h3>
-                    <p class="text-neutral-600 mb-4">Comprehensive mission planning and flight data logging</p>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">QGroundControl</span>
-                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">Mission Planner</span>
-                    </div>
-                </div>
-                
-                <div class="bg-white p-8 rounded-trimble hover-subtle slide-in-left stagger-1 border border-neutral-200">
-                    <div class="w-12 h-12 rounded-trimble flex items-center justify-center mb-6 border border-neutral-200">
-                        <i class="fas fa-satellite text-neutral-900 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-medium text-neutral-900 mb-4">DAAM Integration</h3>
-                    <p class="text-neutral-600 mb-4">Digital Asset & Airspace Management for enterprise operations</p>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">Remote ID</span>
-                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">LAANC</span>
-                    </div>
-                </div>
-                
-                <div class="bg-white p-8 rounded-trimble hover-subtle slide-in-left stagger-2 border border-neutral-200">
-                    <div class="w-12 h-12 rounded-trimble flex items-center justify-center mb-6 border border-neutral-200">
-                        <i class="fas fa-plane text-neutral-900 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-medium text-neutral-900 mb-4">Flight Tracking</h3>
-                    <p class="text-neutral-600 mb-4">Real-time flight tracking and monitoring systems</p>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">FlightAware</span>
-                        <span class="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">FlightRadar24</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Security Shield Module -->
-    <section class="bg-white py-28">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-2 gap-20 items-center">
-                <div class="slide-in-left">
-                    <div class="mb-6 fade-in">
-                        <div class="flex items-center">
-                            <div class="w-1 h-8 bg-brand mr-4"></div>
-                            <h2 class="text-3xl lg:text-4xl font-light text-neutral-900">
-                                <span class="font-semibold">CBI</span> Shield
-                            </h2>
-                        </div>
+            <div class="my-16 text-center relative slide-in-up">
+                <!-- 背景图容器（只在大屏幕显示） -->
+                                 <div class="absolute bg-cover bg-center rounded-trimble hidden lg:block" style="background-image: url('xian.png'); top: -4rem; bottom: -4rem; left: -2rem; right: -2rem;"></div>
+                
+                <!-- 内容（添加背景色） -->
+                <div class="max-w-4xl mx-auto relative z-10 p-4 rounded-trimble bg-neutral-900">
+                    <div class="flex justify-center mb-4">
+                        <img src="logo new@6x.png" alt="Company Logo" class="h-10">
                     </div>
                     
-                    <p class="text-lg text-neutral-600 mb-8 leading-relaxed fade-in stagger-1 font-light">
-                        Enterprise-grade security designed for the most demanding regulatory environments. 
-                        Deploy with confidence across cloud, hybrid, or air-gapped infrastructures.
+                    <p class="text-neutral-300 text-lg leading-relaxed">
+                        Software Platform and Solution-Driven Product
                     </p>
-                    
-                    <div class="grid md:grid-cols-2 gap-6 mb-10">
-                        <div class="border border-neutral-200 rounded-trimble p-6 hover-subtle">
-                            <div class="w-10 h-10 rounded-trimble flex items-center justify-center mb-4 border border-neutral-200">
-                                <i class="fas fa-cloud text-neutral-900"></i>
-                            </div>
-                            <h4 class="font-semibold text-neutral-900 mb-2">Cloud</h4>
-                            <p class="text-neutral-600 text-sm">Scalable cloud deployment with global redundancy</p>
-                        </div>
-                        
-                        <div class="border border-neutral-200 rounded-trimble p-6 hover-subtle">
-                            <div class="w-10 h-10 rounded-trimble flex items-center justify-center mb-4 border border-neutral-200">
-                                <i class="fas fa-globe text-neutral-900"></i>
-                            </div>
-                            <h4 class="font-semibold text-neutral-900 mb-2">In-Country Cloud</h4>
-                            <p class="text-neutral-600 text-sm">Data sovereignty compliance with local hosting</p>
-                        </div>
-                        
-                        <div class="border border-neutral-200 rounded-trimble p-6 hover-subtle">
-                            <div class="w-10 h-10 rounded-trimble flex items-center justify-center mb-4 border border-neutral-200">
-                                <i class="fas fa-server text-neutral-900"></i>
-                            </div>
-                            <h4 class="font-semibold text-neutral-900 mb-2">On-Premises</h4>
-                            <p class="text-neutral-600 text-sm">Complete control with private infrastructure</p>
-                        </div>
-                        
-                        <div class="border border-neutral-200 rounded-trimble p-6 hover-subtle">
-                            <div class="w-10 h-10 rounded-trimble flex items-center justify-center mb-4 border border-neutral-200">
-                                <i class="fas fa-lock text-neutral-900"></i>
-                            </div>
-                            <h4 class="font-semibold text-neutral-900 mb-2">Air-Gapped</h4>
-                            <p class="text-neutral-600 text-sm">Maximum security for sensitive operations</p>
-                        </div>
-                    </div>
+                </div>
+            </div>
 
-                </div>
+
+            <div class="grid lg:grid-cols-4 gap-4 slide-in-right">
+                                 <div class="relative rounded-trimble hover:bg-neutral-700 transition-all duration-300 overflow-hidden bg-cover bg-center h-64 flex flex-col justify-end" style="background-image: url('bg2-1.png');">
+                     <!-- 黑色蒙层 -->
+                     <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+                     <div class="relative z-10 px-2 py-4">
+                         <h3 class="text-2xl font-regular text-white mb-2">Professional Service</h3>
+                         <p class="text-neutral-300 font-regular leading-relaxed text-sm">
+                            End-to-end support — from solution design to deployment and long-term optimization.
+
+                         </p>
+                     </div>
+                 </div>
+            
+                                 <div class="relative rounded-trimble hover:bg-neutral-700 transition-all duration-300 overflow-hidden bg-cover bg-center h-64 flex flex-col justify-end" style="background-image: url('AI\ customerize.avif');">
+                     <!-- 黑色蒙层 -->
+                     <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+                     <div class="relative z-10 px-2 py-8">
+                         <h3 class="text-2xl font-regular text-white mb-2">Al Customization</h3>
+                         <p class="text-neutral-300 font-regular leading-relaxed text-sm">
+                            Custom AI development for your data, devices, and inspection workflows.
+
+                         </p>
+                     </div>
+                 </div>
+            
+                                 <div class="relative rounded-trimble hover:bg-neutral-700 transition-all duration-300 overflow-hidden bg-cover bg-center h-64 flex flex-col justify-end" style="background-image: url('On-Premise.avif');">
+                     <!-- 黑色蒙层 -->
+                     <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+                     <div class="relative z-10 px-2 py-8">
+                         <h3 class="text-2xl font-regular text-white mb-2">On-Premise</h3>
+                         <p class="text-neutral-300 font-regular leading-relaxed text-sm">
+                            Deploy securely on private cloud or on-premise — full control, full compliance.
+
+                         </p>
+                     </div>
+                 </div>
+            
+                                 <div class="relative rounded-trimble hover:bg-neutral-700 transition-all duration-300 overflow-hidden bg-cover bg-center h-64 flex flex-col justify-end" style="background-image: url('ecosystem.avif');">
+                     <!-- 黑色蒙层 -->
+                     <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+                     <div class="relative z-10 px-2 py-8">
+                         <h3 class="text-2xl font-regular text-white mb-2">Ecosystem</h3>
+                         <p class="text-neutral-300 font-regular leading-relaxed text-sm">
+                            Open APIs, hardware integration, and built-in security for scalable deployments.
+                         </p>
+                     </div>
+                 </div>
                 
-                <div>
-                    <img src="data-security.png" 
-                         alt="Enterprise Security" 
-                         class="w-full h-96 lg:h-[500px] object-cover rounded-trimble">
-                </div>
             </div>
         </div>
     </section>
 
-    <!-- BVLOS Compliance -->
-    <section class="bg-neutral-100 py-28">
+
+
+    <!-- Industries We Serve -->
+    <section class="py-28" style="background-color: #000000;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-20 slide-in-left">
-                <div class="flex items-center justify-center mb-8">
-                    <div class="w-1 h-8 bg-brand mr-4"></div>
-                    <h2 class="text-3xl lg:text-4xl font-light text-neutral-900">
-                        <span class="font-semibold">BVLOS</span> Compliance Built-In
-                    </h2>
+            <div class="text-center mb-24 slide-in-left">
+                <div class="mb-8">
+                    <p class="text-brand text-sm font-medium uppercase tracking-wider mb-4">WHAT WE DO</p>
                 </div>
-                <p class="text-lg text-neutral-600 max-w-3xl mx-auto font-light">
-                    Advanced risk mitigation and regulatory compliance for Beyond Visual Line of Sight operations
-                </p>
-            </div>
-            
-            <div class="grid lg:grid-cols-4 gap-12">
-                <div class="text-center slide-in-left stagger-1">
-                    <div class="w-20 h-20 rounded-trimble flex items-center justify-center mx-auto mb-6 hover-subtle border border-neutral-200">
-                        <i class="fas fa-map-marked-alt text-neutral-900 text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold text-neutral-900 mb-4">Ground Risk Mitigation</h3>
-                    <p class="text-neutral-600">
-                        Advanced terrain analysis and population density mapping for safe flight corridor planning
-                    </p>
-                </div>
-                
-                <div class="text-center slide-in-left stagger-2">
-                    <div class="w-20 h-20 rounded-trimble flex items-center justify-center mx-auto mb-6 hover-subtle border border-neutral-200">
-                        <i class="fas fa-plane text-neutral-900 text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold text-neutral-900 mb-4">Air Risk Mitigation</h3>
-                    <p class="text-neutral-600">
-                        Real-time airspace monitoring and collision avoidance with manned aircraft integration
-                    </p>
-                </div>
-                
-                <div class="text-center slide-in-left stagger-3">
-                    <div class="w-20 h-20 rounded-trimble flex items-center justify-center mx-auto mb-6 hover-subtle border border-neutral-200">
-                        <i class="fas fa-sitemap text-neutral-900 text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold text-neutral-900 mb-4">One-to-Many Ops</h3>
-                    <p class="text-neutral-600">
-                        Single operator managing multiple drone operations with automated coordination
-                    </p>
-                </div>
-                
-                <div class="text-center slide-in-left stagger-4">
-                    <div class="w-20 h-20 rounded-trimble flex items-center justify-center mx-auto mb-6 hover-subtle border border-neutral-200">
-                        <i class="fas fa-hands-helping text-neutral-900 text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold text-neutral-900 mb-4">BVLOS Assistance</h3>
-                    <p class="text-neutral-600">
-                        Dedicated support program for regulatory approvals and compliance documentation
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Hardware Compatibility -->
-    <section class="bg-white py-28">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-20 slide-in-right">
-                <div class="flex items-center justify-center mb-8">
-                    <div class="w-1 h-8 bg-brand mr-4"></div>
-                    <h2 class="text-3xl lg:text-4xl font-light text-neutral-900">
-                        <span class="font-semibold">20+</span> Hardware Options
-                    </h2>
-                </div>
-                <p class="text-lg text-neutral-600 max-w-3xl mx-auto font-light">
-                    Compatible with leading drone, dock, and payload manufacturers worldwide
-                </p>
-            </div>
-            
-            <div class="grid lg:grid-cols-3 gap-16">
-                <div class="text-center slide-in-right stagger-1">
-                    <div class="w-16 h-16 rounded-trimble flex items-center justify-center mx-auto mb-6 border border-neutral-200">
-                        <i class="fas fa-helicopter text-neutral-900 text-2xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-semibold text-neutral-900 mb-6">Drones</h3>
-                    <div class="space-y-3">
-                        <div class="border border-neutral-200 p-4 rounded-trimble">DJI Matrice Series</div>
-                        <div class="border border-neutral-200 p-4 rounded-trimble">Autel EVO Series</div>
-                        <div class="border border-neutral-200 p-4 rounded-trimble">Parrot ANAFI Series</div>
-                        <div class="border border-neutral-200 p-4 rounded-trimble">Skydio Enterprise</div>
-                        <div class="border border-neutral-200 p-4 rounded-trimble">Wingtra WingtraOne</div>
-                        <div class="border border-neutral-200 p-4 rounded-trimble">senseFly eBee Series</div>
-                    </div>
-                </div>
-                
-                <div class="text-center slide-in-right stagger-2">
-                    <div class="w-16 h-16 rounded-trimble flex items-center justify-center mx-auto mb-6 border border-neutral-200">
-                        <i class="fas fa-warehouse text-neutral-900 text-2xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-semibold text-neutral-900 mb-6">Docks</h3>
-                    <div class="space-y-3">
-                        <div class="border border-neutral-200 p-4 rounded-trimble">DJI Dock 2</div>
-                        <div class="border border-neutral-200 p-4 rounded-trimble">Skydio Dock</div>
-                        <div class="border border-neutral-200 p-4 rounded-trimble">Percepto AirMax</div>
-                        <div class="border border-neutral-200 p-4 rounded-trimble">Easy Aerial Sentry</div>
-                        <div class="border border-neutral-200 p-4 rounded-trimble">Airobotics Optimus</div>
-                        <div class="border border-neutral-200 p-4 rounded-trimble">FlytBase Dock</div>
-                    </div>
-                </div>
-                
-                <div class="text-center slide-in-right stagger-3">
-                    <div class="w-16 h-16 rounded-trimble flex items-center justify-center mx-auto mb-6 border border-neutral-200">
-                        <i class="fas fa-camera text-neutral-900 text-2xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-semibold text-neutral-900 mb-6">Payloads</h3>
-                    <div class="space-y-3">
-                        <div class="border border-neutral-200 p-4 rounded-trimble">FLIR Thermal Cameras</div>
-                        <div class="border border-neutral-200 p-4 rounded-trimble">LiDAR Sensors</div>
-                        <div class="border border-neutral-200 p-4 rounded-trimble">Multispectral Cameras</div>
-                        <div class="border border-neutral-200 p-4 rounded-trimble">Gas Detection Sensors</div>
-                        <div class="border border-neutral-200 p-4 rounded-trimble">Zoom Cameras</div>
-                        <div class="border border-neutral-200 p-4 rounded-trimble">Custom Payloads</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Industry Applications -->
-    <section class="bg-neutral-100 py-28">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-20 slide-in-left">
-                <div class="flex items-center justify-center mb-8">
-                    <div class="w-1 h-8 bg-brand mr-4"></div>
-                    <h2 class="text-3xl lg:text-4xl font-light text-neutral-900">
-                        <span class="font-semibold">Single Platform</span>. Multiple Industries.
-                    </h2>
-                </div>
-                <p class="text-lg text-neutral-600 max-w-3xl mx-auto font-light">
-                    Tailored solutions for diverse industry needs with specialized workflows and analytics
-                </p>
-            </div>
-            
-            <div class="bg-white rounded-trimble overflow-hidden slide-in-left">
-                <div class="flex flex-wrap border-b border-neutral-200">
-                    <button class="px-6 py-4 text-brand border-b-2 border-brand font-semibold bg-brand/5">Oil & Gas</button>
-                    <button class="px-6 py-4 text-neutral-600 hover:text-brand hover:bg-neutral-50 transition-colors">Mining</button>
-                    <button class="px-6 py-4 text-neutral-600 hover:text-brand hover:bg-neutral-50 transition-colors">Agriculture</button>
-                    <button class="px-6 py-4 text-neutral-600 hover:text-brand hover:bg-neutral-50 transition-colors">Public Safety</button>
-                    <button class="px-6 py-4 text-neutral-600 hover:text-brand hover:bg-neutral-50 transition-colors">Solar</button>
-                    <button class="px-6 py-4 text-neutral-600 hover:text-brand hover:bg-neutral-50 transition-colors">Construction</button>
-                </div>
-                
-                <div class="p-8 lg:p-12">
-                    <div class="grid lg:grid-cols-2 gap-12 items-center">
-                        <div>
-                            <h3 class="text-2xl font-bold text-neutral-900 mb-6">Oil & Gas Operations</h3>
-                            <div class="space-y-4 mb-8">
-                                <div class="flex items-start">
-                                    <div class="perfect-dot"></div>
-                                    <p class="text-neutral-700">Pipeline inspection and leak detection with thermal imaging</p>
-                                </div>
-                                <div class="flex items-start">
-                                    <div class="perfect-dot"></div>
-                                    <p class="text-neutral-700">Offshore platform monitoring and safety compliance</p>
-                                </div>
-                                <div class="flex items-start">
-                                    <div class="perfect-dot"></div>
-                                    <p class="text-neutral-700">Environmental monitoring and spill response</p>
-                                </div>
-                                <div class="flex items-start">
-                                    <div class="perfect-dot"></div>
-                                    <p class="text-neutral-700">Asset integrity management and predictive maintenance</p>
-                                </div>
-                            </div>
-                            <div class="bg-neutral-50 p-6 rounded-trimble">
-                                <h4 class="font-semibold text-neutral-900 mb-2">ROI Impact</h4>
-                                <p class="text-brand text-2xl font-bold">65% reduction</p>
-                                <p class="text-neutral-600">in inspection costs and 40% faster anomaly detection</p>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <img src="single-platform-multiple-industries.jpg" 
-                                 alt="Single Platform Multiple Industries" 
-                                 class="w-full h-80 object-cover rounded-trimble">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Partner Network -->
-    <section class="bg-white py-28">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-20 slide-in-right">
-                <div class="flex items-center justify-center mb-8">
-                    <div class="w-1 h-8 bg-brand mr-4"></div>
-                    <h2 class="text-3xl lg:text-4xl font-light text-neutral-900">
-                        <span class="font-semibold">Global</span> Partner Network
-                    </h2>
-                </div>
-                <p class="text-lg text-neutral-600 max-w-3xl mx-auto font-light">
-                    Working with certified partners worldwide to deliver localized support and expertise
-                </p>
-            </div>
-            
-            <div class="grid lg:grid-cols-3 gap-12 mb-20">
-                <div class="text-center slide-in-right stagger-1">
-                    <div class="text-4xl font-bold text-brand mb-2 counter pulse-gentle">150+</div>
-                    <p class="text-xl text-neutral-900 font-semibold mb-2">Certified Partners</p>
-                    <p class="text-neutral-600">Across 45 countries worldwide</p>
-                </div>
-                
-                <div class="text-center slide-in-right stagger-2">
-                    <div class="text-4xl font-bold text-brand mb-2 counter pulse-gentle">24/7</div>
-                    <p class="text-xl text-neutral-900 font-semibold mb-2">Global Support</p>
-                    <p class="text-neutral-600">Round-the-clock technical assistance</p>
-                </div>
-                
-                <div class="text-center slide-in-right stagger-3">
-                    <div class="text-4xl font-bold text-brand mb-2 counter pulse-gentle">99.9%</div>
-                    <p class="text-xl text-neutral-900 font-semibold mb-2">Uptime SLA</p>
-                    <p class="text-neutral-600">Enterprise-grade reliability guarantee</p>
-                </div>
-            </div>
-            
-            <div class="text-center mb-6">
-                <h3 class="text-xl font-semibold text-neutral-900">Find a Partner Near You</h3>
-            </div>
-            <img src="global-partner-network.jpg" 
-                 alt="Global Partner Network Map" 
-                 class="w-full h-80 object-cover rounded-trimble">
-        </div>
-    </section>
-
-    <!-- Final CTA -->
-    <section class="bg-brand py-28">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="flex items-center justify-center mb-8">
-                <div class="w-1 h-8 bg-white mr-4"></div>
-                <h2 class="text-3xl lg:text-4xl font-light text-white">
-                    Ready to deploy <span class="font-semibold">automated drones</span>?
+                <h2 class="text-4xl lg:text-5xl font-light text-white mb-6">
+                    Accelerating the pace of work across <br />
+                    <span class="font-semibold">the world's essential industries</span>
                 </h2>
+                <p class="text-lg text-neutral-300 max-w-4xl mx-auto font-light leading-relaxed">
+                    CyberXHub connected solutions give you a better way to work. Whether you design and construct buildings, operate and maintain infrastructure, optimize global supply chains or map the world, CyberXHub keeps your projects moving.
+                </p>
             </div>
-            <p class="text-lg text-brand-light mb-12 max-w-2xl mx-auto font-light">
-                Start your journey to autonomous drone operations with our enterprise platform. 
-                No setup fees, cancel anytime.
-            </p>
-            <button class="bg-white hover:bg-brand text-brand hover:text-white px-10 py-4 rounded-trimble font-medium text-lg transition-colors duration-300">
-                Get Started - It's Free
-            </button>
+            
+            <!-- 桌面端：保持原有布局 -->
+            <div class="industry-container hidden md:flex">
+                <!-- Photovoltaics -->
+                <div class="industry-item cursor-pointer slide-in-up stagger-1">
+                    <div class="industry-card">
+                        <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&h=600&fit=crop&crop=center" 
+                             alt="Photovoltaics" 
+                             class="industry-image">
+                        <div class="industry-overlay"></div>
+                        <div class="industry-content">
+                            <h3 class="text-xl font-semibold mb-2">Photovoltaics</h3>
+                        </div>
+                        <div class="industry-border"></div>
+                    </div>
+                    <div class="industry-description">
+                        <p class="text-neutral-300 text-sm leading-relaxed">
+                            Solar panel inspection with thermal imaging.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Public Safety -->
+                <div class="industry-item cursor-pointer slide-in-up stagger-2">
+                    <div class="industry-card">
+                        <img src="public safety.avif" 
+                             alt="Public Safety" 
+                             class="industry-image">
+                        <div class="industry-overlay"></div>
+                        <div class="industry-content">
+                            <h3 class="text-xl font-semibold mb-2">Public Safety</h3>
+                        </div>
+                        <div class="industry-border"></div>
+                    </div>
+                    <div class="industry-description">
+                        <p class="text-neutral-300 text-sm leading-relaxed">
+                            Emergency response and surveillance operations.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Construction & Mining -->
+                <div class="industry-item cursor-pointer slide-in-up stagger-3">
+                    <div class="industry-card">
+                        <img src="construction&mining.avif" 
+                             alt="Construction & Mining" 
+                             class="industry-image">
+                        <div class="industry-overlay"></div>
+                        <div class="industry-content">
+                            <h3 class="text-xl font-semibold mb-2">Construction & Mining</h3>
+                        </div>
+                        <div class="industry-border"></div>
+                    </div>
+                    <div class="industry-description">
+                        <p class="text-neutral-300 text-sm leading-relaxed">
+                            Site monitoring and safety inspections.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Electricity -->
+                <div class="industry-item cursor-pointer slide-in-up stagger-4">
+                    <div class="industry-card">
+                        <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&h=600&fit=crop&crop=center" 
+                             alt="Electricity" 
+                             class="industry-image">
+                        <div class="industry-overlay"></div>
+                        <div class="industry-content">
+                            <h3 class="text-xl font-semibold mb-2">Electricity</h3>
+                        </div>
+                        <div class="industry-border"></div>
+                    </div>
+                    <div class="industry-description">
+                        <p class="text-neutral-300 text-sm leading-relaxed">
+                            Power line inspection and grid monitoring.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Oil & Gas -->
+                <div class="industry-item cursor-pointer slide-in-up stagger-5">
+                    <div class="industry-card">
+                        <img src="oil&gas.png" 
+                             alt="Oil & Gas" 
+                             class="industry-image">
+                        <div class="industry-overlay"></div>
+                        <div class="industry-content">
+                            <h3 class="text-xl font-semibold mb-2">Oil & Gas</h3>
+                        </div>
+                        <div class="industry-border"></div>
+                    </div>
+                    <div class="industry-description">
+                        <p class="text-neutral-300 text-sm leading-relaxed">
+                            Pipeline monitoring and facility inspection.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 移动端：轮播布局 -->
+            <div class="md:hidden relative" style="height: 350px; overflow: hidden;">
+                <div class="industry-carousel" id="industry-carousel">
+                        <!-- Photovoltaics -->
+                        <div class="industry-item">
+                            <div class="industry-card">
+                                <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&h=600&fit=crop&crop=center" 
+                                     alt="Photovoltaics" 
+                                     class="industry-image">
+                                <div class="industry-overlay"></div>
+                                <div class="industry-content">
+                                    <h3 class="text-xl font-semibold mb-2">Photovoltaics</h3>
+                                    <p class="text-neutral-300 text-sm leading-relaxed">
+                                        Solar panel inspection with thermal imaging.
+                                    </p>
+                                </div>
+                                <div class="industry-border"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Public Safety -->
+                        <div class="industry-item">
+                            <div class="industry-card">
+                                <img src="public safety.avif" 
+                                     alt="Public Safety" 
+                                     class="industry-image">
+                                <div class="industry-overlay"></div>
+                                <div class="industry-content">
+                                    <h3 class="text-xl font-semibold mb-2">Public Safety</h3>
+                                    <p class="text-neutral-300 text-sm leading-relaxed">
+                                        Emergency response and surveillance operations.
+                                    </p>
+                                </div>
+                                <div class="industry-border"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Construction & Mining -->
+                        <div class="industry-item">
+                            <div class="industry-card">
+                                <img src="construction&mining.avif" 
+                                     alt="Construction & Mining" 
+                                     class="industry-image">
+                                <div class="industry-overlay"></div>
+                                <div class="industry-content">
+                                    <h3 class="text-xl font-semibold mb-2">Construction & Mining</h3>
+                                    <p class="text-neutral-300 text-sm leading-relaxed">
+                                        Site monitoring and safety inspections.
+                                    </p>
+                                </div>
+                                <div class="industry-border"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Electricity -->
+                        <div class="industry-item">
+                            <div class="industry-card">
+                                <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&h=600&fit=crop&crop=center" 
+                                     alt="Electricity" 
+                                     class="industry-image">
+                                <div class="industry-overlay"></div>
+                                <div class="industry-content">
+                                    <h3 class="text-xl font-semibold mb-2">Electricity</h3>
+                                    <p class="text-neutral-300 text-sm leading-relaxed">
+                                        Power line inspection and grid monitoring.
+                                    </p>
+                                </div>
+                                <div class="industry-border"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Oil & Gas -->
+                        <div class="industry-item">
+                            <div class="industry-card">
+                                <img src="oil&gas.png" 
+                                     alt="Oil & Gas" 
+                                     class="industry-image">
+                                <div class="industry-overlay"></div>
+                                <div class="industry-content">
+                                    <h3 class="text-xl font-semibold mb-2">Oil & Gas</h3>
+                                    <p class="text-neutral-300 text-sm leading-relaxed">
+                                        Pipeline monitoring and facility inspection.
+                                    </p>
+                                </div>
+                                <div class="industry-border"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 导航按钮 -->
+                    <button class="industry-nav-btn industry-nav-prev" id="industry-prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="industry-nav-btn industry-nav-next" id="industry-next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    
+                    <!-- 指示器 -->
+                    <div class="industry-indicators">
+                        <div class="industry-indicator active" data-index="0"></div>
+                        <div class="industry-indicator" data-index="1"></div>
+                        <div class="industry-indicator" data-index="2"></div>
+                        <div class="industry-indicator" data-index="3"></div>
+                        <div class="industry-indicator" data-index="4"></div>
+                    </div>
+            </div>
+            
+                        <div class="text-center mt-16">
+                <p class="text-neutral-400 text-lg font-light italic">Turn ideas into innovation</p>
+            </div>
         </div>
     </section>
+
+    <!-- Our Workflow Process -->
+    <section class="bg-black py-20" style="background-color: #151515;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Header Section -->
+            <div class="slide-in-left mb-12">
+                <div class="flex items-center mb-8">
+                    <div class="w-1 h-10 bg-brand mr-4"></div>
+                    <h2 class="text-4xl lg:text-5xl font-light text-white">
+                        Our <span class="text-white font-semibold">Workflow</span>
+                    </h2>
+                </div>
+                <p class="text-lg text-neutral-300 leading-relaxed font-light max-w-4xl">
+                    From discovery to deployment and beyond — we support your autonomous inspection journey with expert guidance and tailored solutions.
+
+                </p>
+            </div>
+            
+            <!-- Content Section -->
+            <div class="grid lg:grid-cols-2 gap-16 items-start">
+                <div class="slide-in-left relative">
+                    <!-- 连续灰色竖线 -->
+                    <div class="absolute left-6 w-0.5 bg-neutral-700 transition-colors duration-300" 
+                         id="background-line"></div>
+                    
+                    <!-- 白色线段层 - 用于悬停时显示 -->
+                    <div class="absolute left-6 top-0 w-0.5 transition-colors duration-300" style="height: 100%;">
+                        <!-- 步骤1的白色线段 -->
+                        <div class="absolute top-0 w-full bg-white transition-all duration-300 opacity-0" 
+                             id="line-segment-1" 
+                             style="height: 0px;"></div>
+                        <!-- 步骤2的白色线段 -->
+                        <div class="absolute top-0 w-full bg-white transition-all duration-300 opacity-0" 
+                             id="line-segment-2" 
+                             style="height: 0px;"></div>
+                        <!-- 步骤3的白色线段 -->
+                        <div class="absolute top-0 w-full bg-white transition-all duration-300 opacity-0" 
+                             id="line-segment-3" 
+                             style="height: 0px;"></div>
+                        <!-- 步骤4的白色线段 -->
+                        <div class="absolute top-0 w-full bg-white transition-all duration-300 opacity-0" 
+                             id="line-segment-4" 
+                             style="height: 0px;"></div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <!-- Step 1 -->
+                        <div class="workflow-step flex items-start cursor-pointer transition-all duration-300 p-4" 
+                             data-step="1" 
+                             data-image="discovery and planning.avif">
+                            <div class="flex-shrink-0 w-12 mr-6 mt-2">
+                                <!-- 占位空间 -->
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-neutral-500 mb-3 transition-colors duration-300">Discovery & Planning</h3>
+                                <p class="text-neutral-500 leading-relaxed transition-colors duration-300">
+                                    Define goals, assess site needs, and identify the right mix of drones, cameras, and robots for your operations.
+
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 2 -->
+                        <div class="workflow-step flex items-start cursor-pointer transition-all duration-300 p-4" 
+                             data-step="2" 
+                             data-image="architecture & development.avif">
+                            <div class="flex-shrink-0 w-12 mr-6 mt-2">
+                                <!-- 占位空间 -->
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-neutral-500 mb-3 transition-colors duration-300">Architecture & Development
+                                </h3>
+                                <p class="text-neutral-500 leading-relaxed transition-colors duration-300">
+                                    Select the right CyberXHub modules and develop custom AI, workflows, and system integrations.
+
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 3 -->
+                        <div class="workflow-step flex items-start cursor-pointer transition-all duration-300 p-4" 
+                             data-step="3" 
+                             data-image="deployment & enablement.avif">
+                            <div class="flex-shrink-0 w-12 mr-6 mt-2">
+                                <!-- 占位空间 -->
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-neutral-500 mb-3 transition-colors duration-300">Deployment & Enablement</h3>
+                                <p class="text-neutral-500 leading-relaxed transition-colors duration-300">
+                                    Deploy on cloud or on-prem. We support onboarding, training, and go-live readiness.
+
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 4 -->
+                        <div class="workflow-step flex items-start cursor-pointer transition-all duration-300 p-4" 
+                             data-step="4" 
+                             data-image="continuous optimization.avif">
+                            <div class="flex-shrink-0 w-12 mr-6 mt-2">
+                                <!-- 占位空间 -->
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-neutral-500 mb-3 transition-colors duration-300">Continuous Optimization</h3>
+                                <p class="text-neutral-500 leading-relaxed transition-colors duration-300">
+                                    Post-launch, we help you scale, fine-tune performance, and unlock new capabilities.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:pl-8 slide-in-right relative overflow-hidden" id="workflow-image-container">
+                    <img id="workflow-image"
+                         src="discovery and planning.avif" 
+                         alt="Workflow Process" 
+                         class="w-full object-cover transition-transform duration-300 ease-in-out" 
+                         style="object-position: center;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form -->
+    
+
 
     <!-- Footer -->
-    <footer class="bg-neutral-900 text-white py-16">
+    <footer id="contact" class="bg-neutral-900 text-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Newsletter -->
-            <div class="border-b border-neutral-700 pb-12 mb-12">
-                <div class="grid lg:grid-cols-2 gap-8 items-center">
-                    <div>
-                        <h3 class="text-2xl font-light mb-4">Stay ahead of the curve</h3>
-                        <p class="text-neutral-300">Get the latest drone industry insights and platform updates delivered to your inbox.</p>
-                    </div>
-                    <div>
-                        <div class="flex gap-4">
-                            <input type="email" placeholder="Enter your email" 
-                                   class="flex-1 px-4 py-3 bg-neutral-800 border border-neutral-600 rounded-trimble text-white placeholder-neutral-400 focus:outline-none focus:border-brand">
-                            <button class="bg-brand hover:bg-brand-light px-6 py-3 rounded-trimble font-medium transition-colors">
-                                Subscribe
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
             <!-- Footer Links -->
             <div class="grid lg:grid-cols-4 gap-8 mb-12">
                 <div>
@@ -1128,7 +1183,7 @@
             <div class="border-t border-neutral-700 pt-8">
                 <div class="flex flex-col lg:flex-row justify-between items-center">
                     <div class="flex items-center mb-4 lg:mb-0">
-                        <img src="logo.png" alt="Company Logo" class="h-6">
+                        <img src="logo new@6x.png" alt="Company Logo" class="h-6">
                     </div>
                     
                     <div class="flex flex-col lg:flex-row items-center space-y-2 lg:space-y-0 lg:space-x-6">
@@ -1174,7 +1229,7 @@
                 }, this.observerOptions);
 
                 // 观察滑入动画元素
-                document.querySelectorAll('.slide-in-left, .slide-in-right').forEach(el => observer.observe(el));
+                document.querySelectorAll('.slide-in-left, .slide-in-right, .slide-in-up').forEach(el => observer.observe(el));
             }
             
 
@@ -1240,14 +1295,524 @@
                         this.className = 'px-6 py-4 text-brand border-b-2 border-brand font-semibold bg-brand/5';
                     });
                 });
+                
+                // 行业卡片自动轮播功能
+                this.setupIndustryCarousel();
+                
+                // 工作流程交互
+                this.setupWorkflowInteraction();
             }
             
+            setupIndustryCarousel() {
+                // 检查屏幕宽度来决定使用哪种模式
+                const isMobile = window.innerWidth <= 768;
+                
+                if (isMobile) {
+                    this.setupMobileIndustryCarousel();
+                } else {
+                    this.setupDesktopIndustryCarousel();
+                }
+                
+                // 监听窗口大小变化
+                window.addEventListener('resize', () => {
+                    const newIsMobile = window.innerWidth <= 768;
+                    if (newIsMobile !== isMobile) {
+                        // 重新初始化
+                        setTimeout(() => {
+                            this.setupIndustryCarousel();
+                        }, 100);
+                    }
+                });
+            }
+            
+            setupDesktopIndustryCarousel() {
+                const industryItems = document.querySelectorAll('.industry-container.hidden .industry-item');
+                const industryContainer = document.querySelector('.industry-container.hidden');
+                
+                if (!industryItems.length || !industryContainer) return;
+                
+                let currentIndex = 0;
+                let isHovering = false;
+                let carouselInterval;
+                
+                // 添加激活状态的CSS类
+                const addActiveClass = (index) => {
+                    industryItems.forEach((item, i) => {
+                        if (i === index) {
+                            item.classList.add('industry-active');
+                        } else {
+                            item.classList.remove('industry-active');
+                        }
+                    });
+                };
+                
+                // 自动轮播函数
+                const startCarousel = () => {
+                    carouselInterval = setInterval(() => {
+                        if (!isHovering) {
+                            currentIndex = (currentIndex + 1) % industryItems.length;
+                            addActiveClass(currentIndex);
+                        }
+                    }, 3000); // 每3秒切换一次
+                };
+                
+                // 停止轮播
+                const stopCarousel = () => {
+                    if (carouselInterval) {
+                        clearInterval(carouselInterval);
+                    }
+                };
+                
+                // 监听容器悬停事件
+                industryContainer.addEventListener('mouseenter', () => {
+                    isHovering = true;
+                    // 清除所有自动激活状态
+                    industryItems.forEach(item => item.classList.remove('industry-active'));
+                });
+                
+                industryContainer.addEventListener('mouseleave', () => {
+                    isHovering = false;
+                    // 重新开始轮播
+                    setTimeout(() => {
+                        if (!isHovering) {
+                            addActiveClass(currentIndex);
+                        }
+                    }, 500); // 延迟500ms再开始轮播
+                });
+                
+                // 初始化第一个卡片为激活状态
+                setTimeout(() => {
+                    addActiveClass(0);
+                }, 1000); // 延迟1秒开始第一个激活状态
+                
+                // 启动轮播
+                setTimeout(() => {
+                    startCarousel();
+                }, 4000); // 延迟4秒开始轮播，让用户先看到第一个卡片
+                
+                // 页面可见性变化时控制轮播
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) {
+                        stopCarousel();
+                    } else {
+                        stopCarousel();
+                        startCarousel();
+                    }
+                });
+            }
+            
+            setupMobileIndustryCarousel() {
+                const carousel = document.getElementById('industry-carousel');
+                const prevButton = document.getElementById('industry-prev');
+                const nextButton = document.getElementById('industry-next');
+                const indicators = document.querySelectorAll('.industry-indicator');
+                
+                if (!carousel || !prevButton || !nextButton) return;
+                
+                let currentIndex = 0;
+                const totalSlides = 5;
+                let isInteracting = false;
+                let autoPlayInterval;
+                
+                // 更新轮播位置
+                const updateCarousel = () => {
+                    const translateX = -currentIndex * 20; // 每个卡片占20%
+                    carousel.style.transform = `translateX(${translateX}%)`;
+                    
+                    // 更新指示器
+                    indicators.forEach((indicator, index) => {
+                        if (index === currentIndex) {
+                            indicator.classList.add('active');
+                        } else {
+                            indicator.classList.remove('active');
+                        }
+                    });
+                };
+                
+                // 下一张
+                const nextSlide = () => {
+                    currentIndex = (currentIndex + 1) % totalSlides;
+                    updateCarousel();
+                };
+                
+                // 上一张
+                const prevSlide = () => {
+                    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+                    updateCarousel();
+                };
+                
+                // 跳转到指定卡片
+                const goToSlide = (index) => {
+                    currentIndex = index;
+                    updateCarousel();
+                };
+                
+                // 自动播放
+                const startAutoPlay = () => {
+                    autoPlayInterval = setInterval(() => {
+                        if (!isInteracting) {
+                            nextSlide();
+                        }
+                    }, 4000);
+                };
+                
+                const stopAutoPlay = () => {
+                    if (autoPlayInterval) {
+                        clearInterval(autoPlayInterval);
+                        autoPlayInterval = null;
+                    }
+                };
+                
+                // 按钮事件
+                nextButton.addEventListener('click', () => {
+                    isInteracting = true;
+                    nextSlide();
+                    setTimeout(() => { isInteracting = false; }, 1000);
+                });
+                
+                prevButton.addEventListener('click', () => {
+                    isInteracting = true;
+                    prevSlide();
+                    setTimeout(() => { isInteracting = false; }, 1000);
+                });
+                
+                // 指示器事件
+                indicators.forEach((indicator, index) => {
+                    indicator.addEventListener('click', () => {
+                        isInteracting = true;
+                        goToSlide(index);
+                        setTimeout(() => { isInteracting = false; }, 1000);
+                    });
+                });
+                
+                // 触摸滑动支持
+                let startX = 0;
+                let isDragging = false;
+                
+                carousel.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                    isDragging = true;
+                    isInteracting = true;
+                });
+                
+                carousel.addEventListener('touchmove', (e) => {
+                    if (!isDragging) return;
+                    e.preventDefault();
+                });
+                
+                carousel.addEventListener('touchend', (e) => {
+                    if (!isDragging) return;
+                    
+                    const endX = e.changedTouches[0].clientX;
+                    const diff = startX - endX;
+                    
+                    if (Math.abs(diff) > 50) { // 滑动阈值50px
+                        if (diff > 0) {
+                            nextSlide(); // 向左滑动，显示下一张
+                        } else {
+                            prevSlide(); // 向右滑动，显示上一张
+                        }
+                    }
+                    
+                    isDragging = false;
+                    setTimeout(() => { isInteracting = false; }, 1000);
+                });
+                
+                // 初始化
+                updateCarousel();
+                
+                // 启动自动播放
+                setTimeout(() => {
+                    startAutoPlay();
+                }, 2000);
+                
+                // 页面可见性变化时控制自动播放
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) {
+                        stopAutoPlay();
+                    } else {
+                        stopAutoPlay();
+                        setTimeout(() => {
+                            startAutoPlay();
+                        }, 1000);
+                    }
+                });
+            }
+            
+            setupWorkflowInteraction() {
+                const workflowSteps = document.querySelectorAll('.workflow-step');
+                const workflowImage = document.getElementById('workflow-image');
+                
+                if (!workflowSteps.length || !workflowImage) return;
+                
+                // 计算每个步骤的位置和高度
+                const calculateStepPositions = () => {
+                    const stepPositions = [];
+                    let currentTop = 0;
+                    
+                    workflowSteps.forEach((step, index) => {
+                        const stepRect = step.getBoundingClientRect();
+                        const containerRect = step.parentElement.getBoundingClientRect();
+                        const stepTop = stepRect.top - containerRect.top;
+                        const stepHeight = stepRect.height;
+                        
+                        stepPositions.push({
+                            top: stepTop,
+                            height: stepHeight,
+                            bottom: stepTop + stepHeight
+                        });
+                    });
+                    
+                    return stepPositions;
+                };
+                
+                // 为每个工作流程步骤添加悬停事件
+                workflowSteps.forEach((step) => {
+                    step.addEventListener('mouseenter', () => {
+                        // 立即强制重置所有步骤，确保清洁状态
+                        this.forceResetAllSteps();
+                        
+                        // 激活当前步骤
+                        this.activateWorkflowStep(step);
+                        
+                        // 计算并激活对应的竖线段
+                        const stepNumber = parseInt(step.getAttribute('data-step'));
+                        const stepPositions = calculateStepPositions();
+                        
+                        if (stepPositions[stepNumber - 1]) {
+                            const currentStep = stepPositions[stepNumber - 1];
+                            const lineSegment = document.getElementById(`line-segment-${stepNumber}`);
+                            
+                            if (lineSegment) {
+                                // 计算稍微短一点的高度（减少20%）
+                                const reducedHeight = currentStep.height * 0.8;
+                                const topOffset = currentStep.height * 0.1; // 顶部偏移10%
+                                
+                                // 立即设置位置和透明度，然后添加高度动画
+                                lineSegment.style.top = `${currentStep.top + topOffset}px`;
+                                lineSegment.style.opacity = '1'; // 显示白色线段
+                                lineSegment.style.height = '0px'; // 先设置为0，准备动画
+                                
+                                // 添加变长动画效果
+                                requestAnimationFrame(() => {
+                                    lineSegment.style.height = `${reducedHeight}px`;
+                                });
+                            }
+                        }
+                        
+                        // 切换图片 - 直接切换
+                        const imageUrl = step.getAttribute('data-image');
+                        if (imageUrl && workflowImage.src !== imageUrl) {
+                            workflowImage.src = imageUrl;
+                        }
+                    });
+                    
+                    step.addEventListener('mouseleave', () => {
+                        // 立即检查是否有其他步骤被悬停
+                        setTimeout(() => {
+                            const anyStepHovered = Array.from(workflowSteps).some(s => s.matches(':hover'));
+                            if (!anyStepHovered) {
+                                // 立即重置所有步骤，避免状态冲突
+                                this.resetAllWorkflowSteps();
+                                
+                                // 立即激活第一个步骤
+                                this.activateWorkflowStep(workflowSteps[0]);
+                                const firstLineSegment = document.getElementById('line-segment-1');
+                                if (firstLineSegment) {
+                                    firstLineSegment.style.opacity = '1';
+                                }
+                                
+                                // 恢复第一个步骤的图片
+                                const firstImageUrl = workflowSteps[0].getAttribute('data-image');
+                                if (firstImageUrl && workflowImage.src !== firstImageUrl) {
+                                    workflowImage.src = firstImageUrl;
+                                }
+                            }
+                        }, 50); // 减少延迟时间
+                    });
+                });
+                
+                // 初始化所有白色线段和背景线
+                setTimeout(() => {
+                    const stepPositions = calculateStepPositions();
+                    
+                    // 计算所有步骤的总范围，包括减少后的高度
+                    let minTop = Infinity;
+                    let maxBottom = 0;
+                    
+                    stepPositions.forEach((step, index) => {
+                        const lineSegment = document.getElementById(`line-segment-${index + 1}`);
+                        if (lineSegment) {
+                            // 计算稍微短一点的高度（减少20%）
+                            const reducedHeight = step.height * 0.8;
+                            const topOffset = step.height * 0.1; // 顶部偏移10%
+                            const adjustedTop = step.top + topOffset;
+                            const adjustedBottom = adjustedTop + reducedHeight;
+                            
+                            minTop = Math.min(minTop, adjustedTop);
+                            maxBottom = Math.max(maxBottom, adjustedBottom);
+                            
+                            lineSegment.style.top = `${adjustedTop}px`;
+                            lineSegment.style.height = `${reducedHeight}px`;
+                            lineSegment.style.opacity = '0'; // 默认隐藏
+                        }
+                    });
+                    
+                    // 设置背景线的位置和高度，与所有步骤的范围对齐
+                    const backgroundLine = document.getElementById('background-line');
+                    if (backgroundLine) {
+                        backgroundLine.style.top = `${minTop}px`;
+                        backgroundLine.style.height = `${maxBottom - minTop}px`;
+                    }
+                    
+                    // 设置图片高度与左侧文字区域匹配
+                    this.adjustImageHeight();
+                    
+                    // 激活第一个步骤
+                    if (workflowSteps.length > 0) {
+                        this.activateWorkflowStep(workflowSteps[0]);
+                        const firstLineSegment = document.getElementById('line-segment-1');
+                        if (firstLineSegment) {
+                            firstLineSegment.style.opacity = '1'; // 显示白色线段
+                        }
+                    }
+                }, 100);
+            }
+            
+            resetAllWorkflowSteps() {
+                const workflowSteps = document.querySelectorAll('.workflow-step');
+                workflowSteps.forEach(step => {
+                    const title = step.querySelector('h3');
+                    const description = step.querySelector('p');
+                    
+                    if (title) title.className = 'text-xl font-semibold text-neutral-500 mb-3 transition-colors duration-300';
+                    if (description) description.className = 'text-neutral-500 leading-relaxed transition-colors duration-300';
+                });
+                
+                // 立即重置所有白色线段为隐藏，避免多个线段同时显示
+                for (let i = 1; i <= 4; i++) {
+                    const lineSegment = document.getElementById(`line-segment-${i}`);
+                    if (lineSegment) {
+                        lineSegment.style.opacity = '0'; // 立即隐藏白色线段
+                        lineSegment.style.height = '0px'; // 立即重置高度
+                    }
+                }
+            }
+            
+            forceResetAllSteps() {
+                const workflowSteps = document.querySelectorAll('.workflow-step');
+                
+                // 强制重置所有文字颜色
+                workflowSteps.forEach(step => {
+                    const title = step.querySelector('h3');
+                    const description = step.querySelector('p');
+                    
+                    if (title) {
+                        title.className = 'text-xl font-semibold text-neutral-500 mb-3 transition-colors duration-300';
+                        title.style.color = ''; // 清除内联样式
+                    }
+                    if (description) {
+                        description.className = 'text-neutral-500 leading-relaxed transition-colors duration-300';
+                        description.style.color = ''; // 清除内联样式
+                    }
+                });
+                
+                // 强制重置所有白色线段，清除所有状态
+                for (let i = 1; i <= 4; i++) {
+                    const lineSegment = document.getElementById(`line-segment-${i}`);
+                    if (lineSegment) {
+                        lineSegment.style.opacity = '0';
+                        lineSegment.style.height = '0px';
+                        lineSegment.style.transition = 'all 0.3s ease';
+                    }
+                }
+            }
+            
+            resetAllWorkflowStepsWithAnimation() {
+                const workflowSteps = document.querySelectorAll('.workflow-step');
+                
+                workflowSteps.forEach(step => {
+                    const title = step.querySelector('h3');
+                    const description = step.querySelector('p');
+                    
+                    if (title) title.className = 'text-xl font-semibold text-neutral-500 mb-3 transition-colors duration-300';
+                    if (description) description.className = 'text-neutral-500 leading-relaxed transition-colors duration-300';
+                });
+                
+                // 先收缩所有白色线段，然后隐藏
+                for (let i = 1; i <= 4; i++) {
+                    const lineSegment = document.getElementById(`line-segment-${i}`);
+                    if (lineSegment) {
+                        lineSegment.style.height = '0px'; // 收缩动画
+                        setTimeout(() => {
+                            lineSegment.style.opacity = '0'; // 隐藏白色线段
+                        }, 150);
+                    }
+                }
+            }
+            
+            activateWorkflowStep(step) {
+                const title = step.querySelector('h3');
+                const description = step.querySelector('p');
+                
+                if (title) title.className = 'text-xl font-semibold text-white mb-3 transition-colors duration-300';
+                if (description) description.className = 'text-neutral-300 leading-relaxed transition-colors duration-300';
+            }
+            
+            adjustImageHeight() {
+                const textContainer = document.querySelector('.workflow-step').parentElement;
+                const imageContainer = document.getElementById('workflow-image-container');
+                const workflowImage = document.getElementById('workflow-image');
+                
+                if (textContainer && imageContainer && workflowImage) {
+                    // 获取左侧文字区域的实际高度
+                    const textHeight = textContainer.offsetHeight;
+                    
+                    // 设置图片容器和图片的高度
+                    imageContainer.style.height = `${textHeight}px`;
+                    workflowImage.style.height = `${textHeight}px`;
+                    
+                    console.log('调整图片高度为:', textHeight + 'px');
+                }
+            }
 
+        }
+        
+        // 前景图与视频同步缩放功能
+        function updateHeroVideoScale() {
+            const heroImg = document.querySelector('.fade-in.stagger-4 img');
+            const heroVideo = document.querySelector('.hero-overlay-video');
+            
+            if (heroImg && heroVideo) {
+                // 获取图片的自然尺寸和当前显示尺寸
+                const naturalWidth = heroImg.naturalWidth;
+                const currentWidth = heroImg.clientWidth;
+                
+                // 计算缩放比例
+                const scale = currentWidth / naturalWidth;
+                
+                // 设置CSS变量
+                document.documentElement.style.setProperty('--hero-scale', scale);
+            }
         }
         
         // 页面加载完成后初始化动画控制器
         document.addEventListener('DOMContentLoaded', () => {
             new AnimationController();
+            
+            // 初始化视频缩放
+            setTimeout(() => {
+                updateHeroVideoScale();
+            }, 100);
+            
+            // 窗口大小改变时更新缩放
+            window.addEventListener('resize', updateHeroVideoScale);
+            
+            // 图片加载完成后更新缩放
+            const heroImg = document.querySelector('.fade-in.stagger-4 img');
+            if (heroImg) {
+                heroImg.addEventListener('load', updateHeroVideoScale);
+            }
         });
     </script>
 </body>

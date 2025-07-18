@@ -1,0 +1,489 @@
+/* ================================
+   组件库系统 (Component Library)
+   无人机企业网站设计系统
+   ================================ */
+
+/* ========== 基础重置 ========== */
+.ds-reset {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ========== 布局组件 ========== */
+
+/* 容器 */
+.ds-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .ds-container {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .ds-container {
+    padding-left: var(--space-8);
+    padding-right: var(--space-8);
+  }
+}
+
+/* 网格系统 */
+.ds-grid {
+  display: grid;
+  gap: var(--space-12);
+}
+
+.ds-grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
+.ds-grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.ds-grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.ds-grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (min-width: 768px) {
+  .ds-grid-md-cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .ds-grid-md-cols-3 { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .ds-grid-lg-cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .ds-grid-lg-cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .ds-grid-lg-cols-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ========== 按钮组件 ========== */
+
+.ds-btn {
+  /* 基础样式 */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-trimble);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--duration-300) var(--easing-out);
+  text-decoration: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* 按钮尺寸 */
+.ds-btn-sm {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+}
+
+.ds-btn-md {
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+}
+
+.ds-btn-lg {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-normal);
+}
+
+/* 按钮变体 */
+.ds-btn-primary {
+  background-color: var(--color-brand);
+  color: var(--color-white);
+}
+
+.ds-btn-primary:hover {
+  background-color: var(--color-brand-light);
+}
+
+.ds-btn-secondary {
+  background-color: transparent;
+  color: var(--color-neutral-900);
+  border-color: var(--color-neutral-900);
+}
+
+.ds-btn-secondary:hover {
+  background-color: var(--color-neutral-900);
+  color: var(--color-white);
+}
+
+.ds-btn-ghost {
+  background-color: transparent;
+  color: var(--color-neutral-700);
+  border-color: transparent;
+}
+
+.ds-btn-ghost:hover {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-900);
+}
+
+/* 按钮状态 */
+.ds-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ========== 卡片组件 ========== */
+
+.ds-card {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-trimble);
+  padding: var(--space-8);
+  transition: border-color var(--duration-300) var(--easing-out);
+}
+
+.ds-card:hover {
+  border-color: var(--color-neutral-900);
+}
+
+.ds-card-icon {
+  width: var(--space-12);
+  height: var(--space-12);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-trimble);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-6);
+  color: var(--color-neutral-900);
+}
+
+.ds-card-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-900);
+  margin-bottom: var(--space-4);
+  line-height: var(--line-height-tight);
+}
+
+.ds-card-content {
+  color: var(--color-neutral-600);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--space-4);
+}
+
+/* ========== 标题组件 ========== */
+
+.ds-section-header {
+  text-align: center;
+  margin-bottom: var(--space-20);
+}
+
+.ds-section-subtitle {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-brand);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-6);
+}
+
+.ds-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-8);
+}
+
+.ds-section-title::before {
+  content: '';
+  width: 4px;
+  height: var(--space-8);
+  background-color: var(--color-brand);
+  margin-right: var(--space-4);
+}
+
+.ds-section-title h2 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-light);
+  color: var(--color-neutral-900);
+  margin: 0;
+  line-height: var(--line-height-tight);
+}
+
+@media (min-width: 1024px) {
+  .ds-section-title h2 {
+    font-size: var(--font-size-4xl);
+  }
+}
+
+.ds-section-title .highlight {
+  font-weight: var(--font-weight-semibold);
+}
+
+.ds-section-description {
+  font-size: var(--font-size-lg);
+  color: var(--color-neutral-600);
+  font-weight: var(--font-weight-light);
+  line-height: var(--line-height-relaxed);
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+/* ========== 导航组件 ========== */
+
+.ds-navbar {
+  background-color: var(--color-white);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  transition: transform var(--duration-300) var(--easing-in-out);
+}
+
+.ds-navbar-hidden {
+  transform: translateY(-100%);
+}
+
+.ds-navbar-top {
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.ds-navbar-top-content {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ds-navbar-main-content {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ds-navbar-logo img {
+  height: 40px;
+}
+
+.ds-navbar-menu {
+  display: none;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+@media (min-width: 1024px) {
+  .ds-navbar-menu {
+    display: flex;
+  }
+}
+
+.ds-navbar-link {
+  color: var(--color-neutral-700);
+  text-decoration: none;
+  font-weight: var(--font-weight-normal);
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color var(--duration-300) var(--easing-out);
+}
+
+.ds-navbar-link:hover {
+  color: var(--color-brand);
+}
+
+/* ========== 特色列表组件 ========== */
+
+.ds-feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.ds-feature-item {
+  display: flex;
+  align-items: flex-start;
+}
+
+.ds-feature-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-brand);
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-right: var(--space-3);
+  margin-top: 0.6em;
+}
+
+.ds-feature-content h4 {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-900);
+  margin-bottom: var(--space-2);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-tight);
+}
+
+.ds-feature-content p {
+  color: var(--color-neutral-600);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+/* ========== 标签组件 ========== */
+
+.ds-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.ds-tag {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+}
+
+/* ========== 动画组件 ========== */
+
+.ds-slide-in-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: all var(--duration-700) var(--easing-out);
+}
+
+.ds-slide-in-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.ds-slide-in-right {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: all var(--duration-700) var(--easing-out);
+}
+
+.ds-slide-in-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.ds-stagger-1 { animation-delay: calc(var(--duration-100) * 1); }
+.ds-stagger-2 { animation-delay: calc(var(--duration-100) * 2); }
+.ds-stagger-3 { animation-delay: calc(var(--duration-100) * 3); }
+.ds-stagger-4 { animation-delay: calc(var(--duration-100) * 4); }
+
+/* ========== 工具类 ========== */
+
+/* 间距工具 */
+.ds-py-section { padding-top: var(--space-28); padding-bottom: var(--space-28); }
+.ds-py-hero { padding-top: var(--space-32); padding-bottom: var(--space-32); }
+
+@media (min-width: 1024px) {
+  .ds-py-hero { padding-top: var(--space-40); padding-bottom: var(--space-40); }
+}
+
+/* 背景工具 */
+.ds-bg-white { background-color: var(--color-white); }
+.ds-bg-neutral-100 { background-color: var(--color-neutral-100); }
+.ds-bg-brand { background-color: var(--color-brand); }
+.ds-bg-neutral-900 { background-color: var(--color-neutral-900); }
+
+/* 文字工具 */
+.ds-text-center { text-align: center; }
+.ds-text-left { text-align: left; }
+.ds-text-right { text-align: right; }
+
+.ds-font-light { font-weight: var(--font-weight-light); }
+.ds-font-normal { font-weight: var(--font-weight-normal); }
+.ds-font-medium { font-weight: var(--font-weight-medium); }
+.ds-font-semibold { font-weight: var(--font-weight-semibold); }
+
+.ds-text-brand { color: var(--color-brand); }
+.ds-text-white { color: var(--color-white); }
+.ds-text-neutral-600 { color: var(--color-neutral-600); }
+.ds-text-neutral-700 { color: var(--color-neutral-700); }
+.ds-text-neutral-900 { color: var(--color-neutral-900); }
+
+/* ========== 英雄区组件 ========== */
+
+.ds-hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.ds-hero-bg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.ds-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+.ds-hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.ds-hero-title {
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-light);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--space-8);
+}
+
+@media (min-width: 1024px) {
+  .ds-hero-title {
+    font-size: var(--font-size-7xl);
+  }
+}
+
+.ds-hero-description {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-light);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--space-12);
+}
+
+@media (min-width: 1024px) {
+  .ds-hero-description {
+    font-size: var(--font-size-xl);
+  }
+}
+
+.ds-hero-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+@media (min-width: 640px) {
+  .ds-hero-actions {
+    flex-direction: row;
+  }
+}
+
+/* ========== 工作流程组件 ========== */
+
+/* 工作流程步骤激活状态 */
+.workflow-step.active h3,
+.workflow-step.active p {
+  color: white !important;
+}
+
+/* 悬停时文字变白 */
+.workflow-step:hover h3,
+.workflow-step:hover p {
+  color: white !important;
+}

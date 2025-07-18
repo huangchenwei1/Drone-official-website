@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设计系统测试页面 - 无人机企业网站</title>
+    
+    <!-- 引入设计系统 -->
+    <link rel="stylesheet" href="design-tokens.css">
+    <link rel="stylesheet" href="design-components.css">
+    
+    <!-- 字体和图标 -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: var(--font-family-primary);
+            color: var(--color-neutral-800);
+            margin: 0;
+            line-height: var(--line-height-normal);
+        }
+        
+        .demo-section {
+            padding: var(--space-16) 0;
+            border-bottom: 1px solid var(--color-neutral-200);
+        }
+        
+        .demo-title {
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-neutral-900);
+            margin-bottom: var(--space-8);
+        }
+        
+        .demo-grid {
+            display: grid;
+            gap: var(--space-6);
+            margin: var(--space-6) 0;
+        }
+        
+        .color-swatch {
+            width: 80px;
+            height: 80px;
+            border-radius: var(--radius-trimble);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: var(--font-size-xs);
+            text-align: center;
+            font-weight: var(--font-weight-medium);
+        }
+        
+        .spacing-demo {
+            background-color: var(--color-brand-50);
+            border: 1px solid var(--color-brand);
+            border-radius: var(--radius-trimble);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏测试 -->
+    <header class="ds-navbar">
+        <!-- 顶部栏 -->
+        <div class="ds-navbar-top">
+            <div class="ds-container">
+                <div class="ds-navbar-top-content">
+                    <div></div>
+                    <div style="display: flex; align-items: center; gap: var(--space-6); font-size: var(--font-size-sm);">
+                        <div style="display: flex; align-items: center; gap: var(--space-2);">
+                            <span style="color: var(--color-neutral-600);">EN</span>
+                            <span style="color: var(--color-neutral-300);">|</span>
+                            <span style="color: var(--color-neutral-400);">ES</span>
+                        </div>
+                        <button style="background: none; border: none; color: var(--color-neutral-500); cursor: pointer;">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <a href="#login" style="color: var(--color-neutral-600); text-decoration: none;">Log in</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 主导航 -->
+        <nav>
+            <div class="ds-container">
+                <div class="ds-navbar-main-content">
+                    <div class="ds-navbar-logo">
+                        <img src="logo.png" alt="Logo">
+                    </div>
+                    
+                    <div class="ds-navbar-menu">
+                        <a href="#" class="ds-navbar-link">INDUSTRIES</a>
+                        <a href="#" class="ds-navbar-link">PRODUCTS</a>
+                        <a href="#" class="ds-navbar-link">RESOURCES</a>
+                        <a href="#" class="ds-navbar-link">EVENTS</a>
+                    </div>
+                    
+                    <div>
+                        <button class="ds-btn ds-btn-secondary ds-btn-sm">CONTACT SALES</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 英雄区测试 -->
+    <section class="ds-hero ds-py-hero ds-bg-neutral-100">
+        <div class="ds-container">
+            <div class="ds-text-center">
+                <h1 class="ds-hero-title ds-text-neutral-900">
+                    设计系统 <span style="font-weight: var(--font-weight-semibold);">测试页面</span>
+                </h1>
+                <p class="ds-hero-description ds-text-neutral-600" style="max-width: 600px; margin: 0 auto var(--space-12);">
+                    这是一个完整的设计系统测试页面，展示所有组件、颜色、字体和间距规范。
+                </p>
+                <div class="ds-hero-actions">
+                    <button class="ds-btn ds-btn-primary ds-btn-lg">
+                        <i class="fas fa-rocket" style="margin-right: var(--space-2);"></i>
+                        开始测试
+                    </button>
+                    <button class="ds-btn ds-btn-secondary ds-btn-lg">查看文档</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 颜色系统测试 -->
+    <section class="demo-section ds-bg-white">
+        <div class="ds-container">
+            <h2 class="demo-title">🎨 颜色系统</h2>
+            
+            <h3 style="color: var(--color-neutral-700); margin: var(--space-8) 0 var(--space-4);">品牌色</h3>
+            <div style="display: flex; gap: var(--space-4);">
+                <div class="color-swatch" style="background-color: var(--color-brand);">Brand<br>#028985</div>
+                <div class="color-swatch" style="background-color: var(--color-brand-light);">Light<br>#0ABAB5</div>
+                <div class="color-swatch" style="background-color: var(--color-brand-dark);">Dark<br>#016663</div>
+            </div>
+            
+            <h3 style="color: var(--color-neutral-700); margin: var(--space-8) 0 var(--space-4);">中性色</h3>
+            <div style="display: flex; gap: var(--space-4); flex-wrap: wrap;">
+                <div class="color-swatch" style="background-color: var(--color-neutral-900);">900<br>#171717</div>
+                <div class="color-swatch" style="background-color: var(--color-neutral-800);">800<br>#262626</div>
+                <div class="color-swatch" style="background-color: var(--color-neutral-700);">700<br>#404040</div>
+                <div class="color-swatch" style="background-color: var(--color-neutral-600);">600<br>#525252</div>
+                <div class="color-swatch" style="background-color: var(--color-neutral-500);">500<br>#737373</div>
+                <div class="color-swatch" style="background-color: var(--color-neutral-400); color: var(--color-neutral-900);">400<br>#a3a3a3</div>
+                <div class="color-swatch" style="background-color: var(--color-neutral-300); color: var(--color-neutral-900);">300<br>#d4d4d4</div>
+                <div class="color-swatch" style="background-color: var(--color-neutral-200); color: var(--color-neutral-900);">200<br>#e5e5e5</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 按钮系统测试 -->
+    <section class="demo-section ds-bg-neutral-100">
+        <div class="ds-container">
+            <h2 class="demo-title">🔘 按钮系统</h2>
+            
+            <div class="demo-grid">
+                <div>
+                    <h3 style="color: var(--color-neutral-700); margin-bottom: var(--space-4);">主要按钮</h3>
+                    <div style="display: flex; gap: var(--space-4); align-items: center;">
+                        <button class="ds-btn ds-btn-primary ds-btn-sm">Small</button>
+                        <button class="ds-btn ds-btn-primary ds-btn-md">Medium</button>
+                        <button class="ds-btn ds-btn-primary ds-btn-lg">Large</button>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 style="color: var(--color-neutral-700); margin-bottom: var(--space-4);">次要按钮</h3>
+                    <div style="display: flex; gap: var(--space-4); align-items: center;">
+                        <button class="ds-btn ds-btn-secondary ds-btn-sm">Small</button>
+                        <button class="ds-btn ds-btn-secondary ds-btn-md">Medium</button>
+                        <button class="ds-btn ds-btn-secondary ds-btn-lg">Large</button>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 style="color: var(--color-neutral-700); margin-bottom: var(--space-4);">幽灵按钮</h3>
+                    <div style="display: flex; gap: var(--space-4); align-items: center;">
+                        <button class="ds-btn ds-btn-ghost ds-btn-sm">Small</button>
+                        <button class="ds-btn ds-btn-ghost ds-btn-md">Medium</button>
+                        <button class="ds-btn ds-btn-ghost ds-btn-lg">Large</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 卡片系统测试 -->
+    <section class="demo-section ds-bg-white">
+        <div class="ds-container">
+            <h2 class="demo-title">🃏 卡片系统</h2>
+            
+            <div class="ds-grid ds-grid-cols-1 ds-grid-md-cols-2 ds-grid-lg-cols-3">
+                <div class="ds-card">
+                    <div class="ds-card-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3 class="ds-card-title">高性能</h3>
+                    <p class="ds-card-content">闪电般的加载速度，为用户提供更好的体验。</p>
+                    <div class="ds-tags">
+                        <span class="ds-tag">性能</span>
+                        <span class="ds-tag">速度</span>
+                        <span class="ds-tag">体验</span>
+                    </div>
+                </div>
+                
+                <div class="ds-card">
+                    <div class="ds-card-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="ds-card-title">安全可靠</h3>
+                    <p class="ds-card-content">企业级安全保障，99.9%正常运行时间保证。</p>
+                    <div class="ds-tags">
+                        <span class="ds-tag">安全</span>
+                        <span class="ds-tag">可靠性</span>
+                    </div>
+                </div>
+                
+                <div class="ds-card">
+                    <div class="ds-card-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3 class="ds-card-title">易于集成</h3>
+                    <p class="ds-card-content">与现有工作流程无缝集成。</p>
+                    <div class="ds-tags">
+                        <span class="ds-tag">集成</span>
+                        <span class="ds-tag">API</span>
+                        <span class="ds-tag">工作流</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 标题系统测试 -->
+    <section class="demo-section ds-bg-neutral-100">
+        <div class="ds-container">
+            <div class="ds-section-header">
+                <p class="ds-section-subtitle">组件展示</p>
+                <div class="ds-section-title">
+                    <h2>标题系统 <span class="highlight">演示</span></h2>
+                </div>
+                <p class="ds-section-description">
+                    这是一个标准的区块标题组件，包含小标题、主标题和描述文字。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 特色列表测试 -->
+    <section class="demo-section ds-bg-white">
+        <div class="ds-container">
+            <h2 class="demo-title">📋 特色列表</h2>
+            
+            <div style="max-width: 600px;">
+                <div class="ds-feature-list">
+                    <div class="ds-feature-item">
+                        <div class="ds-feature-dot"></div>
+                        <div class="ds-feature-content">
+                            <h4>AI驱动的自主性</h4>
+                            <p>先进的机器学习算法确保最优飞行路径和实时决策。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="ds-feature-item">
+                        <div class="ds-feature-dot"></div>
+                        <div class="ds-feature-content">
+                            <h4>企业级安全</h4>
+                            <p>银行级加密和国际数据保护标准合规。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="ds-feature-item">
+                        <div class="ds-feature-dot"></div>
+                        <div class="ds-feature-content">
+                            <h4>BVLOS合规</h4>
+                            <p>内置全球超视距操作监管合规性。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 间距系统测试 -->
+    <section class="demo-section ds-bg-neutral-100">
+        <div class="ds-container">
+            <h2 class="demo-title">📏 间距系统</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-6);">
+                <div class="spacing-demo" style="height: var(--space-4);">space-4 (16px)</div>
+                <div class="spacing-demo" style="height: var(--space-6);">space-6 (24px)</div>
+                <div class="spacing-demo" style="height: var(--space-8);">space-8 (32px)</div>
+                <div class="spacing-demo" style="height: var(--space-12);">space-12 (48px)</div>
+                <div class="spacing-demo" style="height: var(--space-16);">space-16 (64px)</div>
+                <div class="spacing-demo" style="height: var(--space-20);">space-20 (80px)</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 动画测试 -->
+    <section class="demo-section ds-bg-white">
+        <div class="ds-container">
+            <h2 class="demo-title">🎭 动画系统</h2>
+            
+            <div class="ds-grid ds-grid-cols-1 ds-grid-md-cols-2 ds-grid-lg-cols-4">
+                <div class="ds-card ds-slide-in-left ds-stagger-1">
+                    <div class="ds-card-icon">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <h3 class="ds-card-title">左滑入</h3>
+                    <p class="ds-card-content">延迟1</p>
+                </div>
+                
+                <div class="ds-card ds-slide-in-left ds-stagger-2">
+                    <div class="ds-card-icon">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <h3 class="ds-card-title">左滑入</h3>
+                    <p class="ds-card-content">延迟2</p>
+                </div>
+                
+                <div class="ds-card ds-slide-in-right ds-stagger-3">
+                    <div class="ds-card-icon">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <h3 class="ds-card-title">右滑入</h3>
+                    <p class="ds-card-content">延迟3</p>
+                </div>
+                
+                <div class="ds-card ds-slide-in-right ds-stagger-4">
+                    <div class="ds-card-icon">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <h3 class="ds-card-title">右滑入</h3>
+                    <p class="ds-card-content">延迟4</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript测试区 -->
+    <section class="demo-section ds-bg-neutral-100">
+        <div class="ds-container">
+            <h2 class="demo-title">⚡ JavaScript 组件工厂</h2>
+            
+            <div style="margin: var(--space-8) 0;">
+                <button class="ds-btn ds-btn-primary ds-btn-md" onclick="testComponentFactory()">
+                    测试组件创建
+                </button>
+                <button class="ds-btn ds-btn-secondary ds-btn-md" onclick="clearTest()" style="margin-left: var(--space-4);">
+                    清除测试
+                </button>
+            </div>
+            
+            <div id="test-container" style="display: grid; gap: var(--space-6);"></div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="ds-bg-neutral-900" style="padding: var(--space-16) 0; color: var(--color-white);">
+        <div class="ds-container">
+            <div class="ds-text-center">
+                <h3 style="color: var(--color-white); margin-bottom: var(--space-4);">设计系统测试完成</h3>
+                <p style="color: var(--color-neutral-400); margin-bottom: var(--space-8);">
+                    所有组件、颜色、字体和动画都已验证完毕
+                </p>
+                <button class="ds-btn ds-btn-primary ds-btn-lg">返回首页</button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 引入设计系统JavaScript -->
+    <script src="design-system.js"></script>
+    
+    <!-- 测试脚本 -->
+    <script>
+        function testComponentFactory() {
+            const container = document.getElementById('test-container');
+            
+            // 测试创建标题
+            const header = DS.createSectionHeader({
+                subtitle: 'JavaScript创建',
+                title: '动态生成的 <span class="highlight">组件</span>',
+                description: '这些组件都是通过JavaScript工厂函数动态创建的'
+            });
+            container.appendChild(header);
+            
+            // 测试创建按钮
+            const buttonContainer = document.createElement('div');
+            buttonContainer.style.display = 'flex';
+            buttonContainer.style.gap = 'var(--space-4)';
+            buttonContainer.style.flexWrap = 'wrap';
+            
+            const btn1 = DS.createButton('主要按钮', 'primary', 'md', {
+                icon: 'fas fa-rocket',
+                onClick: () => alert('主要按钮被点击!')
+            });
+            
+            const btn2 = DS.createButton('次要按钮', 'secondary', 'md', {
+                onClick: () => alert('次要按钮被点击!')
+            });
+            
+            buttonContainer.appendChild(btn1);
+            buttonContainer.appendChild(btn2);
+            container.appendChild(buttonContainer);
+            
+            // 测试创建卡片网格
+            const cards = [
+                {
+                    icon: 'fas fa-magic',
+                    title: 'JavaScript卡片1',
+                    content: '这是通过JS工厂函数创建的卡片。',
+                    tags: ['JavaScript', '动态', '组件'],
+                    actions: [
+                        { text: '查看', variant: 'primary', onClick: () => alert('查看卡片1') },
+                        { text: '编辑', variant: 'ghost', onClick: () => alert('编辑卡片1') }
+                    ]
+                },
+                {
+                    icon: 'fas fa-code',
+                    title: 'JavaScript卡片2',
+                    content: '支持完整的交互功能和事件处理。',
+                    tags: ['交互', '事件'],
+                    actions: [
+                        { text: '查看', variant: 'primary', onClick: () => alert('查看卡片2') }
+                    ]
+                }
+            ];
+            
+            const cardElements = cards.map(cardData => DS.createCard(cardData));
+            const cardGrid = DS.createGrid(cardElements, 2);
+            cardGrid.style.marginTop = 'var(--space-8)';
+            container.appendChild(cardGrid);
+            
+            // 测试特色列表
+            const features = [
+                { title: '动态创建', description: '通过JavaScript动态生成组件' },
+                { title: '事件绑定', description: '自动处理用户交互事件' },
+                { title: '样式一致', description: '确保与设计系统完全一致' }
+            ];
+            
+            const featureList = DS.createFeatureList(features);
+            featureList.style.marginTop = 'var(--space-8)';
+            featureList.style.maxWidth = '600px';
+            container.appendChild(featureList);
+        }
+        
+        function clearTest() {
+            document.getElementById('test-container').innerHTML = '';
+        }
+        
+        // 页面加载后添加一些测试信息
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🎨 设计系统加载完成!');
+            console.log('📋 可用组件:', Object.keys(DS));
+            console.log('🎭 动画系统:', 'DesignSystem类已初始化');
+            console.log('🎨 主题管理:', Object.keys(ThemeManager));
+        });
+    </script>
+</body>
+</html>
